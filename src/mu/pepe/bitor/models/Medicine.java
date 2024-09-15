@@ -66,4 +66,9 @@ public class Medicine {
     public double calculateTotalPrice(int quantity) {
         return this.price * quantity;
     }
+
+    @Override
+    public String toString() {
+        return name;  // Retourner le nom du médicament
+    }
 }

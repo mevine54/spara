@@ -1,5 +1,7 @@
 package mu.pepe.bitor.models;
 
+import mu.pepe.bitor.views.PurchasePage;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +14,25 @@ public class Pharmacy {
     private List<Medicine> medicines;
     private List<Ordonnance> ordonnances;
     private List<Mutuelle> mutuelles;
+    private List<Purchase> purchases;  // Ajout de la liste des achats
 
     public Pharmacy() {
         this.clients = new ArrayList<>();
         this.doctors = new ArrayList<>();
         this.medicines = new ArrayList<>();
         this.ordonnances = new ArrayList<>();
+        this.mutuelles = new ArrayList<>();
+        this.purchases = new ArrayList<>();  // Initialisation de la liste des achats
+    }
+
+    // Ajout d'un achat
+    public void addPurchase(Purchase purchase) {
+        purchases.add(purchase);
+    }
+
+    // Récupérer la liste des achats
+    public List<Purchase> getPurchases() {
+        return purchases;
     }
 
     // Gestion des clients

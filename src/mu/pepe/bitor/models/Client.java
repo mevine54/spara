@@ -60,4 +60,9 @@ public class Client extends Person {
     public void addSpecialist(Specialist specialist) {
         specialists.add(specialist);
     }
+
+    @Override
+    public String toString() {
+        return  lastName + " " + firstName;  // Retourner le nom complet
+    }
 }

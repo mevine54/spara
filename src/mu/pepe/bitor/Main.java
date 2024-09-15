@@ -1,19 +1,21 @@
 package mu.pepe.bitor;
 
 import mu.pepe.bitor.controllers.PharmacyController;
+import mu.pepe.bitor.enums.MedicineCategory;
 import mu.pepe.bitor.models.*;
 import mu.pepe.bitor.views.ConsoleView;
-import mu.pepe.bitor.enums.MedicineCategory;
-import mu.pepe.bitor.enums.MutuelleType;
-import mu.pepe.bitor.enums.Specialty;
+import mu.pepe.bitor.views.HomePage;
+import mu.pepe.bitor.views.Dashboard;
+import mu.pepe.bitor.enums.*;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         // Initialisation des objets pour la pharmacie
         Pharmacy pharmacy = new Pharmacy();
+        PharmacyController controller = new PharmacyController(pharmacy);
 
         // Création de quelques médecins, clients, médicaments et mutuelles pour tester
         Doctor doctor1 = new Doctor("Jean", "Martin", "12 rue de la santé", "Paris", "75000", "0102030405", "jean.martin@docteur.com", "123456");
@@ -34,11 +36,8 @@ public class Main {
         pharmacy.addMedicine(med1);
         pharmacy.addMedicine(med2);
 
-        // Création du contrôleur de la pharmacie
-        PharmacyController controller = new PharmacyController(pharmacy);
-
-        // Lancement de l'interface console
-        ConsoleView view = new ConsoleView(controller);
-        view.start();  // Lancement de l'application console
+        // Lancer l'interface graphique avec Dashboard
+        Dashboard dashboard = new Dashboard(controller);
+        dashboard.setVisible(true);
     }
 }

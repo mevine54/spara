@@ -2,6 +2,7 @@ package mu.pepe.bitor.controllers;
 
 import mu.pepe.bitor.models.*;
 import mu.pepe.bitor.controllers.PharmacyController;
+
 import java.util.List;
 
 public class PharmacyController {
@@ -9,6 +10,16 @@ public class PharmacyController {
 
     public PharmacyController(Pharmacy pharmacy) {
         this.pharmacy = pharmacy;
+    }
+
+    // Gestion des achats
+    public void addPurchase(Client client, Medicine medicine, int quantity, double totalPrice) {
+        Purchase purchase = new Purchase(client, medicine, quantity, totalPrice);
+        pharmacy.addPurchase(purchase);  // Enregistrer l'achat dans la pharmacie
+    }
+
+    public List<Purchase> getPurchases() {
+        return pharmacy.getPurchases();  // Récupérer la liste des achats
     }
 
     // Gestion des clients
@@ -62,6 +73,7 @@ public class PharmacyController {
     public Medicine getMedicineByName(String doliprane) {
         return pharmacy.getMedicineByName(doliprane);
     }
+
 
     // Récupérer toutes les mutuelles
     public List<Mutuelle> getMutuelles() {
