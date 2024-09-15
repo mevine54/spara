@@ -9,12 +9,15 @@ import mu.pepe.bitor.models.Pharmacy;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Dashboard extends JFrame {
     private PharmacyController controller;
     private JPanel contentPanel;
+    private List<Medicine> selectedMedicines = new ArrayList<>();
+    private double totalPrice = 0;
 
     public Dashboard(PharmacyController controller) {
         this.controller = controller;
@@ -171,54 +174,34 @@ public class Dashboard extends JFrame {
         gbc.gridy = 5;
         purchasePanel.add(totalValueLabel, gbc);
 
-        quantityField.addActionListener(e -> {
+        // Zone d'affichage des médicaments ajoutés
+        JTextArea addedMedicinesArea = new JTextArea(5, 20);
+        addedMedicinesArea.setEditable(false);
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 2;
+        purchasePanel.add(new JScrollPane(addedMedicinesArea), gbc);
+
+        // Bouton Ajouter Médicament
+        JButton addMedicineButton = new JButton("Ajouter Médicament");
+        gbc.gridx = 1;
+        gbc.gridy = 7;
+        purchasePanel.add(addMedicineButton, gbc);
+
+        addMedicineButton.addActionListener(e -> {
             try {
                 int quantity = Integer.parseInt(quantityField.getText());
                 Medicine selectedMedicine = (Medicine) medicineCombo.getSelectedItem();
                 if (selectedMedicine != null) {
-                    double totalPrice = selectedMedicine.calculateTotalPrice(quantity);
+                    double medicineTotalPrice = selectedMedicine.calculateTotalPrice(quantity);
+                    totalPrice += medicineTotalPrice;
+                    selectedMedicines.add(selectedMedicine);
+                    addedMedicinesArea.append(selectedMedicine.getName() + " x " + quantity + " : " + medicineTotalPrice + " €\n");
                     totalValueLabel.setText(totalPrice + " €");
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Quantité invalide.");
             }
-        });
-
-        // Bouton Valider l'achat
-        JButton validateButton = new JButton("Valider l'achat");
-        gbc.gridx = 1;
-        gbc.gridy = 6;
-        purchasePanel.add(validateButton, gbc);
-
-        validateButton.addActionListener(e -> {
-            Medicine selectedMedicine = (Medicine) medicineCombo.getSelectedItem();
-            int quantity;
-            try {
-                quantity = Integer.parseInt(quantityField.getText());
-                if (quantity <= 0) throw new NumberFormatException();
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "Quantité invalide.");
-                return;
-            }
-
-            double totalPrice = selectedMedicine.calculateTotalPrice(quantity);
-
-            JOptionPane.showMessageDialog(null, "Médicament : " + selectedMedicine.getName() +
-                    "\nQuantité : " + quantity +
-                    "\nPrix total : " + totalPrice + " €");
-        });
-
-        // Bouton Retour
-        JButton backButton = new JButton("Retour");
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        purchasePanel.add(backButton, gbc);
-
-        backButton.addActionListener(e -> {
-            // Revenir au Dashboard (page d'accueil)
-            contentPanel.removeAll();
-            contentPanel.revalidate();
-            contentPanel.repaint();
         });
 
         // Listener pour changer entre Achat Direct et Achat Ordonnance
@@ -227,23 +210,103 @@ public class Dashboard extends JFrame {
             if (selectedType.equals("Achat direct")) {
                 purchaseTypeLabel.setText("ACHAT DIRECT");
                 // Masquer les champs clients (si achat direct)
-                quantityLabel.setVisible(true);
-                quantityField.setVisible(true);
-                totalLabel.setVisible(true);
-                totalValueLabel.setVisible(true);
             } else if (selectedType.equals("Achat avec ordonnance")) {
                 purchaseTypeLabel.setText("ACHAT AVEC ORDONNANCE");
                 // Ajouter ici les autres champs (si ordonnance) et rendre visibles
-                quantityLabel.setVisible(true);
-                quantityField.setVisible(true);
-                totalLabel.setVisible(true);
-                totalValueLabel.setVisible(true);
+                showOrdonnanceFields(purchasePanel, gbc);
             }
         });
 
+        // Bouton Valider l'achat
+        JButton validateButton = new JButton("Valider l'achat");
+        gbc.gridx = 1;
+        gbc.gridy = 8;
+        purchasePanel.add(validateButton, gbc);
+
+        validateButton.addActionListener(e -> {
+            // Validation logic
+            JOptionPane.showMessageDialog(null, "Achat validé avec succès !");
+        });
+
+        // Bouton Retour
+        JButton backButton = new JButton("Retour");
+        gbc.gridx = 0;
+        gbc.gridy = 8;
+        purchasePanel.add(backButton, gbc);
+
+        backButton.addActionListener(e -> {
+            contentPanel.removeAll();
+            contentPanel.revalidate();
+            contentPanel.repaint();
+        });
+
+        // Ajouter le panneau au contentPanel
         contentPanel.add(purchasePanel);
         contentPanel.revalidate();
         contentPanel.repaint();
+    }
+
+    private void showOrdonnanceFields(JPanel panel, GridBagConstraints gbc) {
+        // Champs spécifiques pour un achat avec ordonnance (client details)
+
+        // Nom du client
+        JLabel clientNameLabel = new JLabel("Nom du client :");
+        gbc.gridx = 0;
+        gbc.gridy = 9;
+        panel.add(clientNameLabel, gbc);
+
+        JTextField clientNameField = new JTextField();
+        gbc.gridx = 1;
+        gbc.gridy = 9;
+        panel.add(clientNameField, gbc);
+
+        // Téléphone
+        JLabel phoneLabel = new JLabel("Téléphone :");
+        gbc.gridx = 0;
+        gbc.gridy = 10;
+        panel.add(phoneLabel, gbc);
+
+        JTextField phoneField = new JTextField();
+        gbc.gridx = 1;
+        gbc.gridy = 10;
+        panel.add(phoneField, gbc);
+
+        // Email
+        JLabel emailLabel = new JLabel("Email :");
+        gbc.gridx = 0;
+        gbc.gridy = 11;
+        panel.add(emailLabel, gbc);
+
+        JTextField emailField = new JTextField();
+        gbc.gridx = 1;
+        gbc.gridy = 11;
+        panel.add(emailField, gbc);
+
+        // Numéro de sécurité sociale
+        JLabel ssnLabel = new JLabel("Numéro de sécurité sociale :");
+        gbc.gridx = 0;
+        gbc.gridy = 12;
+        panel.add(ssnLabel, gbc);
+
+        JTextField ssnField = new JTextField();
+        gbc.gridx = 1;
+        gbc.gridy = 12;
+        panel.add(ssnField, gbc);
+
+        // Mutuelle
+        JLabel mutuelleLabel = new JLabel("Mutuelle :");
+        gbc.gridx = 0;
+        gbc.gridy = 13;
+        panel.add(mutuelleLabel, gbc);
+
+        JTextField mutuelleField = new JTextField();
+        gbc.gridx = 1;
+        gbc.gridy = 13;
+        panel.add(mutuelleField, gbc);
+
+        // Rafraîchir le panneau
+        panel.revalidate();
+        panel.repaint();
     }
 
     public static void main(String[] args) {
@@ -253,3 +316,5 @@ public class Dashboard extends JFrame {
         dashboard.setVisible(true);
     }
 }
+
+
