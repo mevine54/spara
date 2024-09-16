@@ -1,15 +1,14 @@
-package mu.pepe.bitor;
+package fr.pompey.dev.afpa;
 
-import mu.pepe.bitor.controllers.PharmacyController;
-import mu.pepe.bitor.enums.MedicineCategory;
-import mu.pepe.bitor.models.*;
-import mu.pepe.bitor.views.ConsoleView;
-import mu.pepe.bitor.views.HomePage;
-import mu.pepe.bitor.views.Dashboard;
-import mu.pepe.bitor.enums.*;
+import fr.pompey.dev.afpa.controllers.PharmacyController;
+import fr.pompey.dev.afpa.enums.MedicineCategory;
+import fr.pompey.dev.afpa.enums.Specialty;
+import fr.pompey.dev.afpa.models.*;
+import fr.pompey.dev.afpa.views.Dashboard;
 
-import java.util.Date;
-import java.util.Scanner;
+
+import java.time.LocalDate;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -27,8 +26,8 @@ public class Main {
         client1.addSpecialist(specialist1);
 
         // Création de quelques médicaments
-        Medicine med1 = new Medicine("Doliprane", MedicineCategory.ANALGESIC, 2.5, new Date(), 100);
-        Medicine med2 = new Medicine("Amoxicilline", MedicineCategory.ANTIBIOTIC, 12.0, new Date(), 50);
+        Medicine med1 = new Medicine("Doliprane", MedicineCategory.ANALGESIC, 2.5, LocalDate.now(), 100);
+        Medicine med2 = new Medicine("Amoxicilline", MedicineCategory.ANTIBIOTIC, 12.0, LocalDate.now(), 50);
 
         // Ajout des objets créés à la pharmacie
         pharmacy.addClient(client1);

@@ -1,4 +1,4 @@
-package mu.pepe.bitor.models;
+package fr.pompey.dev.afpa.models;
 
 /**
  * Classe représentant un spécialiste.

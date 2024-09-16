@@ -1,9 +1,10 @@
-package mu.pepe.bitor.views;
+package fr.pompey.dev.afpa.views;
 
-import mu.pepe.bitor.controllers.PharmacyController;
-import mu.pepe.bitor.models.*;
-import mu.pepe.bitor.enums.MedicineCategory;
+import fr.pompey.dev.afpa.controllers.PharmacyController;
+import fr.pompey.dev.afpa.models.*;
 
+
+import java.time.LocalDate;
 import java.util.Scanner;
 import java.util.Date;
 import java.util.ArrayList;
@@ -264,7 +265,7 @@ public class ConsoleView {
         }
 
         // Créer l'ordonnance avec le client et le médecin associés
-        Ordonnance ordonnance = new Ordonnance(new Date(), doctor, client, selectedMedicines, null);
+        Ordonnance ordonnance = new Ordonnance(LocalDate.now(), doctor, client, selectedMedicines, null);
         controller.addOrdonnance(ordonnance);
 
         System.out.println("Ordonnance enregistrée avec succès !");

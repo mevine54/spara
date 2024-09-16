@@ -1,4 +1,4 @@
-package mu.pepe.bitor.enums;
+package fr.pompey.dev.afpa.enums;
 
 /**
  * Enumération représentant les catégories de médicaments.

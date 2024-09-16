@@ -1,19 +1,19 @@
-package mu.pepe.bitor.models;
+package fr.pompey.dev.afpa.models;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
  * Classe représentant une ordonnance.
  */
 public class Ordonnance {
-    private Date date;
+    private LocalDate date;
     private Doctor doctor;
     private Client client;
     private List<Medicine> medicines;
     private Specialist specialist;
 
-    public Ordonnance(Date date, Doctor doctor, Client client, List<Medicine> medicines, Specialist specialist) {
+    public Ordonnance(LocalDate date, Doctor doctor, Client client, List<Medicine> medicines, Specialist specialist) {
         this.date = date;
         this.doctor = doctor;
         this.client = client;
@@ -22,11 +22,11 @@ public class Ordonnance {
     }
 
     // Getters et Setters
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

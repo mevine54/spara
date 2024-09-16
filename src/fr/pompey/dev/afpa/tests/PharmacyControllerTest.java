@@ -1,11 +1,15 @@
-package mu.pepe.bitor.tests;
+package fr.pompey.dev.afpa.tests;
 
-import mu.pepe.bitor.controllers.PharmacyController;
-import mu.pepe.bitor.models.*;
-import mu.pepe.bitor.enums.MedicineCategory;
+import fr.pompey.dev.afpa.controllers.PharmacyController;
+import fr.pompey.dev.afpa.models.Client;
+import fr.pompey.dev.afpa.models.Medicine;
+import fr.pompey.dev.afpa.models.Pharmacy;
+import fr.pompey.dev.afpa.enums.MedicineCategory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.Date;
+
+
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,7 +35,7 @@ class PharmacyControllerTest {
 
     @Test
     void testAddMedicine() {
-        Medicine medicine = new Medicine("Doliprane", MedicineCategory.ANALGESIC, 2.5, new Date(), 100);
+        Medicine medicine = new Medicine("Doliprane", MedicineCategory.ANALGESIC, 2.5, LocalDate.now(), 100);
         controller.addMedicine(medicine);
 
         assertNotNull(controller.getMedicineByName("Doliprane"));
