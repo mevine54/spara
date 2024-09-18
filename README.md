@@ -2,7 +2,7 @@
 
 ## Description
 
-Le projet **Pharmacie Sparadrap** est une application de gestion de pharmacie développée en Java, utilisant le modèle MVC (Modèle-Vue-Contrôleur) avec une interface utilisateur basée sur **Swing**. Elle permet de gérer les achats de médicaments par des clients, soit via un achat direct, soit via une ordonnance. L'application offre une interface graphique intuitive ainsi qu'une version console pour plus de flexibilité.
+Le projet **Pharmacie Sparadrap** est une application de gestion de pharmacie développée en Java, utilisant le modèle MVC (Modèle-Vue-Contrôleur) avec une interface utilisateur basée sur **Swing**. Elle permet de gérer les achats de médicaments par des clients, soit via un achat direct, soit via une ordonnance. L'application offre une interface graphique intuitive.
 
 ## Fonctionnalités
 
