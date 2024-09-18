@@ -61,5 +61,16 @@ public class Purchase {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
+    @Override
+    public String toString() {
+        return "Purchase{" +
+                "client=" + client +
+                ", medicine=" + medicine +
+                ", quantity=" + quantity +
+                ", totalPrice=" + totalPrice +
+                ", date=" + date +
+                '}';
+    }
 }
 

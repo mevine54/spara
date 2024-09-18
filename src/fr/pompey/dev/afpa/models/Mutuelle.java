@@ -89,4 +89,18 @@ public class Mutuelle {
     public void setReimbursementRate(double reimbursementRate) {
         this.reimbursementRate = reimbursementRate;
     }
+
+    @Override
+    public String toString() {
+        return "Mutuelle{" +
+                "name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", department='" + department + '\'' +
+                ", reimbursementRate=" + reimbursementRate +
+                '}';
+    }
 }

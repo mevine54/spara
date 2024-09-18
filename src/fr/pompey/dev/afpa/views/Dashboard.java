@@ -1,8 +1,8 @@
 package fr.pompey.dev.afpa.views;
 
 import fr.pompey.dev.afpa.controllers.PharmacyController;
-import fr.pompey.dev.afpa.models.Medicine;
-import fr.pompey.dev.afpa.models.Pharmacy;
+import fr.pompey.dev.afpa.models.*;
+import fr.pompey.dev.afpa.models.Doctor;
 
 
 import javax.swing.*;
@@ -29,7 +29,7 @@ public class Dashboard extends JFrame {
         // Barre de navigation (navbar)
         JPanel navbar = new JPanel();
         navbar.setLayout(new FlowLayout(FlowLayout.LEFT));
-        navbar.setBackground(new Color(34, 45, 65));
+        navbar.setBackground(new Color(21, 32, 28));
         navbar.setPreferredSize(new Dimension(800, 50));
         JLabel title = new JLabel("Dashboard Pharmacie Sparadrap");
         title.setForeground(Color.WHITE);
@@ -45,23 +45,23 @@ public class Dashboard extends JFrame {
 
         // Boutons de la sidebar
         JButton btnPurchase = new JButton("Effectuer un achat");
-        btnPurchase.setBackground(new Color(34, 150, 243));
+        btnPurchase.setBackground(new Color(32, 119, 18));
         btnPurchase.setForeground(Color.WHITE);
 
         JButton btnHistory = new JButton("Historique des achats");
-        btnHistory.setBackground(new Color(34, 150, 243));
+        btnHistory.setBackground(new Color(32, 119, 18));
         btnHistory.setForeground(Color.WHITE);
 
         JButton btnClients = new JButton("Consulter clients");
-        btnClients.setBackground(new Color(34, 150, 243));
+        btnClients.setBackground(new Color(32, 119, 18));
         btnClients.setForeground(Color.WHITE);
 
         JButton btnDoctors = new JButton("Consulter médecins");
-        btnDoctors.setBackground(new Color(34, 150, 243));
+        btnDoctors.setBackground(new Color(32, 119, 18));
         btnDoctors.setForeground(Color.WHITE);
 
         JButton btnQuit = new JButton("Quitter");
-        btnQuit.setBackground(new Color(255, 69, 58));
+        btnQuit.setBackground(new Color(0, 0, 0));
         btnQuit.setForeground(Color.WHITE);
 
         // Ajout des boutons à la sidebar
@@ -69,7 +69,11 @@ public class Dashboard extends JFrame {
         sidebar.add(btnHistory);
         sidebar.add(btnClients);
         sidebar.add(btnDoctors);
-        sidebar.add(btnQuit);  // Bouton Quitter
+        sidebar.add(btnQuit);
+
+        btnHistory.addActionListener(e -> openHistoryPage());
+        btnClients.addActionListener(e -> openClientPage());
+        btnDoctors.addActionListener(e -> openDoctorPage());
 
         add(sidebar, BorderLayout.WEST);
 
@@ -304,6 +308,192 @@ public class Dashboard extends JFrame {
         // Rafraîchir le panneau
         panel.revalidate();
         panel.repaint();
+    }
+
+    public void openHistoryPage() {
+        contentPanel.removeAll();
+
+        JPanel historyPage = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Label pour l'historique des achats
+        JLabel historyLabel = new JLabel("Historique des achats");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        historyPage.add(historyLabel, gbc);
+
+
+
+        // Zone de texte pour afficher l'historique
+        JTextArea detailsArea = new JTextArea(10, 30);
+        detailsArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(detailsArea);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        historyPage.add(scrollPane, gbc);
+
+        // Récupération des achats et ajout dans l'interface
+        List<Purchase> purchases = controller.getPurchases();
+        StringBuilder detailsText = new StringBuilder();
+        for (Purchase purchase : purchases) {
+            detailsText.append("Client : ").append(purchase.getClient().getFirstName()).append(" ").append(purchase.getClient().getLastName())
+                    .append("\nMédicament : ").append(purchase.getMedicine().getName())
+                    .append("\nQuantité : ").append(purchase.getQuantity())
+                    .append("\nTotal : ").append(purchase.getTotalPrice()).append(" €")
+                    .append("\nDate : ").append(purchase.getDate()).append("\n\n");
+        }
+        detailsArea.setText(detailsText.toString());
+
+        // Ajout du bouton retour
+        JButton backButton = new JButton("Retour");
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        historyPage.add(backButton, gbc);
+        backButton.addActionListener(e -> {
+            contentPanel.removeAll();
+            contentPanel.revalidate();
+            contentPanel.repaint();
+        });
+
+        contentPanel.add(historyPage);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+
+
+    public void openClientPage() {
+        contentPanel.removeAll();
+
+        JPanel clientPage = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Label pour sélectionner un client
+        JLabel clientLabel = new JLabel("sélectionner un client");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        clientPage.add(clientLabel, gbc);
+
+        JComboBox<Client> clientCombo = new JComboBox<>();
+        List<Client> clients = controller.getClients();
+        for (Client client : clients) {
+            clientCombo.addItem(client);
+        }
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        clientPage.add(clientCombo, gbc);
+
+        // Zone de texte pour afficher les détails du client
+        JTextArea clientDetailsArea = new JTextArea(10, 30);
+        clientDetailsArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(clientDetailsArea);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        clientPage.add(scrollPane, gbc);
+
+        // Action pour afficher les détails du client sélectionné
+        clientCombo.addActionListener(e -> {
+            Client selectedClient = (Client) clientCombo.getSelectedItem();
+            if (selectedClient != null) {
+                clientDetailsArea.setText("Nom : " + selectedClient.getFirstName() + " " + selectedClient.getLastName() + "\n" +
+                        "Adresse : " + selectedClient.getAddress() + "\n" +
+                        "Téléphone : " + selectedClient.getPhone() + "\n" +
+                        "Email : " + selectedClient.getEmail() + "\n" +
+                        "Mutuelle : " + selectedClient.getMutuelle().getName() + "\n" +
+                        "Numéro de sécurité sociale : " + selectedClient.getSocialSecurityNumber());
+            }
+        });
+
+        // Ajout du bouton retour
+        JButton backButton = new JButton("Retour");
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        clientPage.add(backButton, gbc);
+        backButton.addActionListener(e -> {
+            contentPanel.removeAll();
+            contentPanel.revalidate();
+            contentPanel.repaint();
+        });
+
+        contentPanel.add(clientPage);
+        contentPanel.revalidate();
+        contentPanel.repaint();
+    }
+
+
+    public void openDoctorPage() {
+        contentPanel.removeAll();
+
+        JPanel doctorPage = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Label pour sélectionner un docteur
+        JLabel doctorLabel = new JLabel("sélectionner un docteur");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        doctorPage.add(doctorLabel, gbc);
+
+        JComboBox<Doctor> doctorCombo = new JComboBox<>();
+        List<Doctor> doctors = controller.getDoctors();
+        for (Doctor doctor : doctors) {
+            doctorCombo.addItem(doctor);
+        }
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        doctorPage.add(doctorCombo, gbc);
+
+        // Zone de texte pour afficher les détails du docteur
+        JTextArea doctorDetailsArea = new JTextArea(10, 30);
+        doctorDetailsArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(doctorDetailsArea);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        doctorPage.add(scrollPane, gbc);
+
+        // Action pour afficher les détails du docteur sélectionné
+        doctorCombo.addActionListener(e -> {
+            Doctor selectedDoctor = (Doctor) doctorCombo.getSelectedItem();
+            if (selectedDoctor != null) {
+                doctorDetailsArea.setText("Nom : " + selectedDoctor.getFirstName() + " " + selectedDoctor.getLastName() + "\n" +
+                        "Adresse : " + selectedDoctor.getAddress() + "\n" +
+                        "Téléphone : " + selectedDoctor.getPhone() + "\n" +
+                        "Email : " + selectedDoctor.getEmail() + "\n" +
+                        "Numéro d'agréement : " + selectedDoctor.getRegistrationNumber());
+
+            }
+        });
+
+        // Ajout du bouton retour
+        JButton backButton = new JButton("Retour");
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        doctorPage.add(backButton, gbc);
+        backButton.addActionListener(e -> {
+            contentPanel.removeAll();
+            contentPanel.revalidate();
+            contentPanel.repaint();
+        });
+
+        contentPanel.add(doctorPage);
+        contentPanel.revalidate();
+        contentPanel.repaint();
     }
 
     public static void main(String[] args) {

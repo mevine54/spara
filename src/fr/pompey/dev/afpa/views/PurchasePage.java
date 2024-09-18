@@ -110,6 +110,17 @@ public class PurchasePage extends JFrame {
             }
         });
 
+        // Ajout du bouton retour
+        JButton retourButton = new JButton("Retour");
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        contentPanel.add(retourButton, gbc);
+        retourButton.addActionListener(e -> {
+            HomePage homePage = new HomePage(controller);
+            homePage.setVisible(true);
+            dispose();
+        });
+
         // Ajout d'un bouton de validation
         JButton validateButton = new JButton("Valider l'achat");
         gbc.gridx = 1;
@@ -133,15 +144,6 @@ public class PurchasePage extends JFrame {
             JOptionPane.showMessageDialog(null, "Achat validé de " + quantity + " unités de " + selectedMedicine.getName() + " pour un total de " + totalPrice + " €");
         });
 
-        // Ajout du bouton retour
-        JButton retourButton = new JButton("Retour");
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        contentPanel.add(retourButton, gbc);
-        retourButton.addActionListener(e -> {
-            HomePage homePage = new HomePage(controller);
-            homePage.setVisible(true);
-            dispose();
-        });
+
     }
 }

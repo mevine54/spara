@@ -104,4 +104,16 @@ public class Pharmacy {
     public List<Mutuelle> getMutuelles() {
         return mutuelles;
     }
+
+    @Override
+    public String toString() {
+        return "Pharmacy{" +
+                "clients=" + clients +
+                ", doctors=" + doctors +
+                ", medicines=" + medicines +
+                ", ordonnances=" + ordonnances +
+                ", mutuelles=" + mutuelles +
+                ", purchases=" + purchases +
+                '}';
+    }
 }

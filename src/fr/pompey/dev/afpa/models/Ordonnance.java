@@ -61,4 +61,15 @@ public class Ordonnance {
     public void setSpecialist(Specialist specialist) {
         this.specialist = specialist;
     }
+
+    @Override
+    public String toString() {
+        return "Ordonnance{" +
+                "date=" + date +
+                ", doctor=" + doctor +
+                ", client=" + client +
+                ", medicines=" + medicines +
+                ", specialist=" + specialist +
+                '}';
+    }
 }

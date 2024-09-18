@@ -38,8 +38,8 @@ public class DoctorPage extends JFrame {
         panel.add(new JScrollPane(detailsArea));
 
         // Bouton pour afficher les détails du médecin
-        JButton btnAfficher = new JButton("Afficher les détails");
-        btnAfficher.addActionListener(new ActionListener() {
+        JButton btnDoctors = new JButton("Afficher les détails");
+        btnDoctors.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Doctor selectedDoctor = (Doctor) comboDoctor.getSelectedItem();
                 if (selectedDoctor != null) {
@@ -47,11 +47,11 @@ public class DoctorPage extends JFrame {
                             "Adresse : " + selectedDoctor.getAddress() + "\n" +
                             "Téléphone : " + selectedDoctor.getPhone() + "\n" +
                             "Email : " + selectedDoctor.getEmail() + "\n" +
-                            "Numéro d'agrément : " + selectedDoctor.getRegistrationNumber());
+                            "Numéro d'agréement : " + selectedDoctor.getRegistrationNumber());
                 }
             }
         });
-        panel.add(btnAfficher);
+        panel.add(btnDoctors);
 
         // Bouton pour revenir à la page d'accueil
         JButton btnRetour = new JButton("Retour");

@@ -13,11 +13,17 @@ public class Doctor extends Person {
     }
 
     // Getters et Setters
+
     public String getRegistrationNumber() {
         return registrationNumber;
     }
 
     public void setRegistrationNumber(String registrationNumber) {
         this.registrationNumber = registrationNumber;
+    }
+
+    @Override
+    public String toString() {
+        return lastName + ' ' + firstName;
     }
 }

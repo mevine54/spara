@@ -42,22 +42,22 @@ public class HomePage extends JFrame {
         panel.add(btnHistory);
 
         // Bouton pour consulter un client
-        JButton btnClient = new JButton("Consulter un client");
-        btnClient.addActionListener(new ActionListener() {
+        JButton btnClients = new JButton("Consulter un client");
+        btnClients.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 openClientPage();
             }
         });
-        panel.add(btnClient);
+        panel.add(btnClients);
 
         // Bouton pour consulter un médecin
-        JButton btnDoctor = new JButton("Consulter un médecin");
-        btnDoctor.addActionListener(new ActionListener() {
+        JButton btnDoctors = new JButton("Consulter un médecin");
+        btnDoctors.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 openDoctorPage();
             }
         });
-        panel.add(btnDoctor);
+        panel.add(btnDoctors);
 
         // Bouton pour quitter
         JButton btnQuit = new JButton("Quitter");

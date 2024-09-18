@@ -8,7 +8,7 @@ public class Client extends Person {
     private String birthDate;
     private Mutuelle mutuelle;
     private Doctor generalDoctor;
-    private List<Specialist> specialists;
+    private final List<Specialist> specialists;
 
     public Client(String firstName, String lastName, String address, String city, String postalCode,
                   String phone, String email, String socialSecurityNumber, String birthDate, Mutuelle mutuelle, Doctor generalDoctor) {

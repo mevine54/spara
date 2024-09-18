@@ -39,8 +39,8 @@ public class ClientPage extends JFrame {
         panel.add(new JScrollPane(detailsArea));
 
         // Bouton pour afficher les détails du client
-        JButton btnAfficher = new JButton("Afficher les détails");
-        btnAfficher.addActionListener(new ActionListener() {
+        JButton btnClients = new JButton("Afficher les détails");
+        btnClients.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Client selectedClient = (Client) comboClient.getSelectedItem();
                 if (selectedClient != null) {
@@ -53,7 +53,7 @@ public class ClientPage extends JFrame {
                 }
             }
         });
-        panel.add(btnAfficher);
+        panel.add(btnClients);
 
         // Bouton pour revenir à la page d'accueil
         JButton btnRetour = new JButton("Retour");

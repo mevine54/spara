@@ -20,4 +20,18 @@ public class Specialist extends Doctor {
     public void setSpecialty(String specialty) {
         this.specialty = specialty;
     }
+
+    @Override
+    public String toString() {
+        return "Specialist{" +
+                "email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", city='" + city + '\'' +
+                ", address='" + address + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", specialty='" + specialty + '\'' +
+                '}';
+    }
 }

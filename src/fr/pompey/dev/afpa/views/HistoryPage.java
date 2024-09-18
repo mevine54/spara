@@ -24,26 +24,26 @@ public class HistoryPage extends JFrame {
         panel.setLayout(new GridLayout(5, 1));
 
         // Zone pour afficher l'historique des achats
-        JTextArea historyArea = new JTextArea(10, 30);
-        historyArea.setEditable(false);
-        panel.add(new JScrollPane(historyArea));
+        JTextArea detailsArea = new JTextArea(10, 30);
+        detailsArea.setEditable(false);
+        panel.add(new JScrollPane(detailsArea));
 
         // Bouton pour afficher l'historique des achats
-        JButton btnAfficher = new JButton("Afficher l'historique");
-        btnAfficher.addActionListener(new ActionListener() {
+        JButton btnHistory = new JButton("Afficher l'historique");
+        btnHistory.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 List<Purchase> purchases = controller.getPurchases();
-                StringBuilder historyText = new StringBuilder();
+                StringBuilder detailsText = new StringBuilder();
                 for (Purchase purchase : purchases) {
-                    historyText.append("Client : ").append(purchase.getClient().getFirstName()).append(" ").append(purchase.getClient().getLastName())
+                    detailsText.append("Client : ").append(purchase.getClient().getFirstName()).append(" ").append(purchase.getClient().getLastName())
                             .append("\nMédicament : ").append(purchase.getMedicine().getName())
                             .append("\nDate : ").append(purchase.getDate())
                             .append("\nPrix : ").append(purchase.getTotalPrice()).append("\n\n");
                 }
-                historyArea.setText(historyText.toString());
+                detailsArea.setText(detailsText.toString());
             }
         });
-        panel.add(btnAfficher);
+        panel.add(btnHistory);
 
         // Bouton pour revenir à la page d'accueil
         JButton btnRetour = new JButton("Retour");
