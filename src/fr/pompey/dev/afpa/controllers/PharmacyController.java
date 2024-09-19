@@ -96,4 +96,8 @@ public class PharmacyController {
     public void removePurchase(Purchase selectedPurchase) {
         pharmacy.removePurchase(selectedPurchase);
     }
+
+    public void removeClient(Client selectedClient) {
+        pharmacy.removeClient(selectedClient);
+    }
 }

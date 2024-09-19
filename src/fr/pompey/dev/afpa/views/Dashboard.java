@@ -475,50 +475,109 @@ public class Dashboard extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Label pour sélectionner un client
-        JLabel clientLabel = new JLabel("sélectionner un client");
+        // Label pour les détails des clients
+        JLabel clientLabel = new JLabel("Détails des clients");
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 1;
+        gbc.gridwidth = 2;
         clientPage.add(clientLabel, gbc);
 
-        JComboBox<Client> clientCombo = new JComboBox<>();
-        List<Client> clients = controller.getClients();
+        // Liste pour afficher les clients
+        DefaultListModel<Client> clientListModel = new DefaultListModel<>();
+        List<Client> clients = controller.getClients();  // Méthode pour obtenir les clients depuis le contrôleur
         for (Client client : clients) {
-            clientCombo.addItem(client);
+            clientListModel.addElement(client);
         }
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        clientPage.add(clientCombo, gbc);
-
-        // Zone de texte pour afficher les détails du client
-        JTextArea clientDetailsArea = new JTextArea(10, 30);
-        clientDetailsArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(clientDetailsArea);
+        JList<Client> clientList = new JList<>(clientListModel);
+        clientList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane scrollPane = new JScrollPane(clientList);
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
         clientPage.add(scrollPane, gbc);
 
-        // Action pour afficher les détails du client sélectionné
-        clientCombo.addActionListener(e -> {
-            Client selectedClient = (Client) clientCombo.getSelectedItem();
+        // Zone de texte pour afficher les détails du client sélectionné
+        JTextArea detailsArea = new JTextArea(10, 30);
+        detailsArea.setEditable(false);
+        JScrollPane detailsScrollPane = new JScrollPane(detailsArea);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        clientPage.add(detailsScrollPane, gbc);
+
+        // Écouteur pour afficher les détails lorsque le client est sélectionné
+        clientList.addListSelectionListener(e -> {
+            Client selectedClient = clientList.getSelectedValue();
             if (selectedClient != null) {
-                clientDetailsArea.setText("Nom : " + selectedClient.getFirstName() + " " + selectedClient.getLastName() + "\n" +
-                        "Adresse : " + selectedClient.getAddress() + "\n" +
-                        "Téléphone : " + selectedClient.getPhone() + "\n" +
-                        "Email : " + selectedClient.getEmail() + "\n" +
-                        "Mutuelle : " + selectedClient.getMutuelle().getName() + "\n" +
-                        "Numéro de sécurité sociale : " + selectedClient.getSocialSecurityNumber());
+                StringBuilder detailsText = new StringBuilder();
+                detailsText.append("Nom : ").append(selectedClient.getLastName())
+                        .append("\nPrénom : ").append(selectedClient.getFirstName())
+                        .append("\nAdresse : ").append(selectedClient.getAddress())
+                        .append("\nTéléphone : ").append(selectedClient.getPhone())
+                        .append("\nEmail : ").append(selectedClient.getEmail());
+
+                detailsArea.setText(detailsText.toString());
             }
         });
 
-        // Ajout du bouton retour
+        // Bouton Ajouter
+        JButton addButton = new JButton("Créer");
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1;
+        clientPage.add(addButton, gbc);
+
+        addButton.addActionListener(e -> {
+            // Logique pour créer un nouveau client
+            createOrModifyClient(null, clientListModel);
+        });
+
+        // Bouton Modifier
+        JButton editButton = new JButton("Modifier");
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        clientPage.add(editButton, gbc);
+
+        editButton.addActionListener(e -> {
+            Client selectedClient = clientList.getSelectedValue();
+            if (selectedClient != null) {
+                // Logique pour modifier le client
+                createOrModifyClient(selectedClient, clientListModel);
+            } else {
+                JOptionPane.showMessageDialog(null, "Veuillez sélectionner un client à modifier.");
+            }
+        });
+
+        // Bouton Supprimer
+        JButton deleteButton = new JButton("Supprimer");
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        clientPage.add(deleteButton, gbc);
+
+        deleteButton.addActionListener(e -> {
+            Client selectedClient = clientList.getSelectedValue();
+            if (selectedClient != null) {
+                int confirm = JOptionPane.showConfirmDialog(null, "Êtes-vous sûr de vouloir supprimer ce client ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    controller.removeClient(selectedClient);  // Méthode pour supprimer le client depuis le contrôleur
+                    clientListModel.removeElement(selectedClient);
+                    detailsArea.setText("");
+                    JOptionPane.showMessageDialog(null, "Client supprimé avec succès.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Veuillez sélectionner un client à supprimer.");
+            }
+        });
+
+        // Bouton Retour
         JButton backButton = new JButton("Retour");
         gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 1;
+        gbc.gridy = 5;
+        gbc.gridwidth = 2;
         clientPage.add(backButton, gbc);
+
         backButton.addActionListener(e -> {
             contentPanel.removeAll();
             contentPanel.revalidate();
@@ -528,6 +587,54 @@ public class Dashboard extends JFrame {
         contentPanel.add(clientPage);
         contentPanel.revalidate();
         contentPanel.repaint();
+    }
+
+    // Méthode pour créer ou modifier un client
+    private void createOrModifyClient(Client client, DefaultListModel<Client> clientListModel) {
+        JTextField lastNameField = new JTextField(20);
+        JTextField firstNameField = new JTextField(20);
+        JTextField addressField = new JTextField(20);
+        JTextField phoneNumberField = new JTextField(20);
+        JTextField emailField = new JTextField(20);
+
+        if (client != null) {
+            lastNameField.setText(client.getLastName());
+            firstNameField.setText(client.getFirstName());
+            addressField.setText(client.getAddress());
+            phoneNumberField.setText(client.getPhone());
+            emailField.setText(client.getEmail());
+        }
+
+        JPanel panel = new JPanel(new GridLayout(5, 2));
+        panel.add(new JLabel("Nom :"));
+        panel.add(lastNameField);
+        panel.add(new JLabel("Prénom :"));
+        panel.add(firstNameField);
+        panel.add(new JLabel("Adresse :"));
+        panel.add(addressField);
+        panel.add(new JLabel("Téléphone :"));
+        panel.add(phoneNumberField);
+        panel.add(new JLabel("Email :"));
+        panel.add(emailField);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, client == null ? "Créer un nouveau client" : "Modifier le client", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            if (client == null) {
+                client = new Client(lastNameField.getText(), firstNameField.getText(), addressField.getText(), phoneNumberField.getText(), emailField.getText());
+                controller.addClient(client);  // Méthode pour ajouter le client via le contrôleur
+                clientListModel.addElement(client);
+                JOptionPane.showMessageDialog(null, "Client créé avec succès.");
+            } else {
+                client.setLastName(lastNameField.getText());
+                client.setFirstName(firstNameField.getText());
+                client.setAddress(addressField.getText());
+                client.setPhone(phoneNumberField.getText());
+                client.setEmail(emailField.getText());
+                controller.updateClient(client);  // Méthode pour mettre à jour le client via le contrôleur
+                clientListModel.setElementAt(client, clientListModel.indexOf(client));
+                JOptionPane.showMessageDialog(null, "Client modifié avec succès.");
+            }
+        }
     }
 
 
