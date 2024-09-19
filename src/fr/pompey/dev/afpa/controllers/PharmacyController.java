@@ -13,8 +13,7 @@ public class PharmacyController {
     }
 
     // Gestion des achats
-    public void addPurchase(Client client, Medicine medicine, int quantity, double totalPrice, LocalDate date) {
-        Purchase purchase = new Purchase(client, medicine, quantity, totalPrice, date);
+    public void addPurchase(Purchase purchase) {
         pharmacy.addPurchase(purchase);  // Enregistrer l'achat dans la pharmacie
     }
 

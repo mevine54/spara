@@ -16,11 +16,9 @@ public class Dashboard extends JFrame {
     private JPanel contentPanel;
     private List<Medicine> selectedMedicines = new ArrayList<>();
     private double totalPrice = 0;
-    private  JTextField clientNameField;
-    private JTextField phoneField;
-    private JTextField emailField;
-    private JTextField ssnField;
-    private JTextField mutuelleField;
+    private  JComboBox<Client> clientCombo;
+    private  JComboBox<Doctor> doctorCombo;
+
 
     public Dashboard(PharmacyController controller) {
         this.controller = controller;
@@ -199,9 +197,11 @@ public class Dashboard extends JFrame {
         addMedicineButton.addActionListener(e -> {
             try {
                 int quantity = Integer.parseInt(quantityField.getText());
-                Medicine selectedMedicine = (Medicine) medicineCombo.getSelectedItem();
+                Medicine selectedMedicineTemp =  (Medicine) medicineCombo.getSelectedItem();
+                Medicine selectedMedicine = selectedMedicineTemp.clone();
                 if (selectedMedicine != null) {
-                    double medicineTotalPrice = selectedMedicine.calculateTotalPrice(quantity);
+                    selectedMedicine.setQuantity(quantity);
+                    double medicineTotalPrice = selectedMedicine.calculateTotalPrice();
                     totalPrice += medicineTotalPrice;
                     selectedMedicines.add(selectedMedicine);
                     addedMedicinesArea.append(selectedMedicine.getName() + " x " + quantity + " : " + medicineTotalPrice + " €\n");
@@ -242,23 +242,37 @@ public class Dashboard extends JFrame {
 //
 //                );
 
-                Medicine selectedMedicine = (Medicine) medicineCombo.getSelectedItem();
+                Medicine selectedMedicineTemp = (Medicine) medicineCombo.getSelectedItem();
+                Medicine selectedMedicine = selectedMedicineTemp.clone();
                 int quantity = Integer.parseInt(quantityField.getText());
-                double totalPrice = Double.parseDouble(totalValueLabel.getText().replace(" €", ""));
+                totalPrice = Double.parseDouble(totalValueLabel.getText().replace(" €", ""));
                 LocalDate date = LocalDate.now();
-
-                controller.addPurchase(client, selectedMedicine, quantity, totalPrice, date);
+                Purchase purchase = new Purchase(selectedMedicines);
+                controller.addPurchase(purchase);
+//                totalPrice = 0;
+                selectedMedicines.clear();
                 JOptionPane.showMessageDialog(null, "Achat validé avec succès !");
             } else if (selectedType.equals("Achat avec ordonnance")) {
                 // Achat avec ordonnance
-                Client client = null;
+                Client client = (Client) clientCombo.getSelectedItem();
+                Doctor doctor = (Doctor) doctorCombo.getSelectedItem();
+
+
 
                 Medicine selectedMedicine = (Medicine) medicineCombo.getSelectedItem();
                 int quantity = Integer.parseInt(quantityField.getText());
-                double totalPrice = Double.parseDouble(totalValueLabel.getText().replace(" €", ""));
+                totalPrice = Double.parseDouble(totalValueLabel.getText().replace(" €", ""));
                 LocalDate date = LocalDate.now();
+                Ordonnance ordonnance;
+                if (doctor instanceof Specialist) {
+                    ordonnance = new Ordonnance(LocalDate.now(),client.getDoctor(),client,selectedMedicines,(Specialist) doctor);
+                }else{
+                    ordonnance = new Ordonnance(LocalDate.now(),client.getDoctor(),client,selectedMedicines,null);
+                }
+                Purchase purchase = new Purchase(ordonnance);
 
-                controller.addPurchase(client, selectedMedicine, quantity, totalPrice, date);
+                controller.addPurchase(purchase);
+//                totalPrice = 0;
                 JOptionPane.showMessageDialog(null, "Achat validé avec succès !");
             }
         });
@@ -290,7 +304,7 @@ public class Dashboard extends JFrame {
         gbc.gridy = 9;
         panel.add(clientNameLabel, gbc);
 
-        JComboBox<Client> clientCombo = new JComboBox<>();
+        clientCombo = new JComboBox<>();
         List<Client> clients = controller.getClients();
         for (Client client : clients) {
             clientCombo.addItem(client);
@@ -306,7 +320,7 @@ public class Dashboard extends JFrame {
         panel.add(doctorLabel, gbc);
 
 
-        JComboBox<Doctor> doctorCombo = new JComboBox<>();
+        doctorCombo = new JComboBox<>();
         List<Doctor> doctors = controller.getDoctors();
         for (Doctor doctor : doctors) {
             doctorCombo.addItem(doctor);
@@ -348,12 +362,22 @@ public class Dashboard extends JFrame {
         // Récupération des achats et ajout dans l'interface
         List<Purchase> purchases = controller.getPurchases();
         StringBuilder detailsText = new StringBuilder();
+        Client client;
         for (Purchase purchase : purchases) {
-            Client client = purchase.getClient();
+            if (purchase.getOrdonnance() != null) {
+                client = purchase.getOrdonnance().getClient();
+            }else{
+                client = null;
+            }
+            String medicamentsStr = "";
+
+            for (Medicine medicine : purchase.getMedicines()) {
+                medicamentsStr += medicine.getName() + " - Quantité: " + medicine.getQuantity() +", ";
+            }
+
             String clientName = (client != null) ? client.getFirstName() + " " + client.getLastName() : "Client inconnu";
             detailsText.append("Client : ").append(clientName)
-                    .append("\nMédicament : ").append(purchase.getMedicine().getName())
-                    .append("\nQuantité : ").append(purchase.getQuantity())
+                    .append("\nMédicament : ").append(medicamentsStr)
                     .append("\nTotal : ").append(purchase.getTotalPrice()).append(" €")
                     .append("\nDate : ").append(purchase.getDate()).append("\n\n");
         }

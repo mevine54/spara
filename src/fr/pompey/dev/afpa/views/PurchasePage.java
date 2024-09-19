@@ -102,7 +102,7 @@ public class PurchasePage extends JFrame {
                 int quantity = Integer.parseInt(quantityField.getText());
                 Medicine selectedMedicine = (Medicine) medicineCombo.getSelectedItem();
                 if (selectedMedicine != null) {
-                    double totalPrice = selectedMedicine.calculateTotalPrice(quantity);
+                    double totalPrice = selectedMedicine.calculateTotalPrice();
                     totalValueLabel.setText(totalPrice + " €");
                 }
             } catch (NumberFormatException ex) {
@@ -141,7 +141,7 @@ public class PurchasePage extends JFrame {
             }
 
             // Calcul du prix total
-            double totalPrice = selectedMedicine.calculateTotalPrice(quantity);
+            double totalPrice = selectedMedicine.calculateTotalPrice();
             JOptionPane.showMessageDialog(null, "Achat validé de " + quantity +
                     " unités de " + selectedMedicine.getName() + " pour un total de " + totalPrice + " €");
         });

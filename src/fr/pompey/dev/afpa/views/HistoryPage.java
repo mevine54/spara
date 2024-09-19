@@ -1,6 +1,7 @@
 package fr.pompey.dev.afpa.views;
 
 import fr.pompey.dev.afpa.controllers.PharmacyController;
+import fr.pompey.dev.afpa.models.Medicine;
 import fr.pompey.dev.afpa.models.Purchase;
 
 import javax.swing.*;
@@ -36,10 +37,20 @@ public class HistoryPage extends JFrame {
                 List<Purchase> purchases = controller.getPurchases();
                 StringBuilder historyText = new StringBuilder();
                 for (Purchase purchase : purchases) {
-                    historyText.append("Client : ").append(purchase.getClient().getFirstName()).append(" ").append(purchase.getClient().getLastName())
-                            .append("\nMédicament : ").append(purchase.getMedicine().getName())
-                            .append("\nDate : ").append(purchase.getDate())
-                            .append("\nPrix : ").append(purchase.getTotalPrice()).append(" €\n--------------------\n");
+                    String medicamentsStr = "";
+
+                    for (Medicine medicine : purchase.getMedicines()) {
+                        medicamentsStr += medicine.getName() + " - Quantité: " + medicine.getQuantity() +", ";
+                    }
+                    if(purchase.getOrdonnance()!= null){
+                        historyText.append("Client : ").append(purchase.getOrdonnance().getClient().getFirstName()).append(" ").append(purchase.getOrdonnance().getClient().getLastName())
+                                .append("\nMédicament : ").append(medicamentsStr)
+                                .append("\nDate : ").append(purchase.getDate())
+                                .append("\nPrix : ").append(purchase.getTotalPrice()).append(" €\n--------------------\n");
+                    } else{
+
+                    }
+
                 }
                 historyArea.setText(historyText.toString());
             }

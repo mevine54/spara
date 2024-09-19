@@ -170,7 +170,7 @@ public class ConsoleView {
             double unitPrice = medicine.getPrice(); // Récupérer le prix unitaire
             System.out.println("Prix unitaire du médicament : " + unitPrice + " €");
 
-            double totalPrice = medicine.calculateTotalPrice(quantity);
+            double totalPrice = medicine.calculateTotalPrice();
             System.out.println("Achat réussi ! Prix total : " + totalPrice + " €");
         } else {
             System.out.println("Médicament non trouvé.");
@@ -254,7 +254,7 @@ public class ConsoleView {
                 scanner.nextLine();  // Consommer la ligne restante
 
                 // Calculer le prix total pour ce médicament et ajouter à l'ordonnance
-                double totalPriceForMedicine = selectedMedicine.calculateTotalPrice(quantity);
+                double totalPriceForMedicine = selectedMedicine.calculateTotalPrice();
                 System.out.println("Total pour " + selectedMedicine.getName() + " : " + totalPriceForMedicine + " €");
 
                 totalPrescriptionPrice += totalPriceForMedicine;

@@ -59,11 +59,18 @@ public class Medicine {
     }
 
     public void setQuantity(int quantity) {
+
         this.quantity = quantity;
+
+    }
+
+    @Override
+    public Medicine clone() {
+        return new Medicine(this.name, this.category, this.price, this.releaseDate, this.quantity);
     }
 
     // Calculer le prix total pour une quantité donnée
-    public double calculateTotalPrice(int quantity) {
+    public double calculateTotalPrice() {
         return this.price * quantity;
     }
 
