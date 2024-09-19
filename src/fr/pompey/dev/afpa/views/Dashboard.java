@@ -249,7 +249,7 @@ public class Dashboard extends JFrame {
                 LocalDate date = LocalDate.now();
                 Purchase purchase = new Purchase(selectedMedicines);
                 controller.addPurchase(purchase);
-//                totalPrice = 0;
+                totalPrice = 0;
                 selectedMedicines.clear();
                 JOptionPane.showMessageDialog(null, "Achat validé avec succès !");
             } else if (selectedType.equals("Achat avec ordonnance")) {
