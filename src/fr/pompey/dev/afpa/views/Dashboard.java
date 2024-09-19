@@ -7,6 +7,7 @@ import fr.pompey.dev.afpa.models.Doctor;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -19,9 +20,10 @@ public class Dashboard extends JFrame {
     public Dashboard(PharmacyController controller) {
         this.controller = controller;
         setTitle("Pharmacie Sparadrap - Dashboard");
-        setSize(800, 600);
+        setSize(600, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setResizable(false);
 
         // Layout principal avec barre latérale et contenu central
         setLayout(new BorderLayout());
@@ -225,8 +227,31 @@ public class Dashboard extends JFrame {
         purchasePanel.add(validateButton, gbc);
 
         validateButton.addActionListener(e -> {
-            // Validation logic
-            JOptionPane.showMessageDialog(null, "Achat validé avec succès !");
+            // Logique pour la validation
+            String selectedType = (String) typeAchatCombo.getSelectedItem();
+            if (selectedType.equals("Achat direct")) {
+                // Achat direct
+                Client client = null;
+                
+                Medicine selectedMedicine = (Medicine) medicineCombo.getSelectedItem();
+                int quantity = Integer.parseInt(quantityField.getText());
+                double totalPrice = Double.parseDouble(totalValueLabel.getText().replace(" €", ""));
+                LocalDate date = LocalDate.now();
+
+                controller.addPurchase(client, selectedMedicine, quantity, totalPrice, date);
+                JOptionPane.showMessageDialog(null, "Achat validé avec succès !");
+            } else if (selectedType.equals("Achat avec ordonnance")) {
+                // Achat avec ordonnance
+                Client client = null;
+
+                Medicine selectedMedicine = (Medicine) medicineCombo.getSelectedItem();
+                int quantity = Integer.parseInt(quantityField.getText());
+                double totalPrice = Double.parseDouble(totalValueLabel.getText().replace(" €", ""));
+                LocalDate date = LocalDate.now();
+
+                controller.addPurchase(client, selectedMedicine, quantity, totalPrice, date);
+                JOptionPane.showMessageDialog(null, "Achat validé avec succès !");
+            }
         });
 
         // Bouton Retour
@@ -326,8 +351,6 @@ public class Dashboard extends JFrame {
         gbc.gridwidth = 2;
         historyPage.add(historyLabel, gbc);
 
-
-
         // Zone de texte pour afficher l'historique
         JTextArea detailsArea = new JTextArea(10, 30);
         detailsArea.setEditable(false);
@@ -341,7 +364,9 @@ public class Dashboard extends JFrame {
         List<Purchase> purchases = controller.getPurchases();
         StringBuilder detailsText = new StringBuilder();
         for (Purchase purchase : purchases) {
-            detailsText.append("Client : ").append(purchase.getClient().getFirstName()).append(" ").append(purchase.getClient().getLastName())
+            Client client = purchase.getClient();
+            String clientName = (client != null) ? client.getFirstName() + " " + client.getLastName() : "Client inconnu";
+            detailsText.append("Client : ").append(clientName)
                     .append("\nMédicament : ").append(purchase.getMedicine().getName())
                     .append("\nQuantité : ").append(purchase.getQuantity())
                     .append("\nTotal : ").append(purchase.getTotalPrice()).append(" €")
@@ -496,12 +521,12 @@ public class Dashboard extends JFrame {
         contentPanel.repaint();
     }
 
-    public static void main(String[] args) {
-        Pharmacy pharmacy = new Pharmacy();
-        PharmacyController controller = new PharmacyController(pharmacy);
-        Dashboard dashboard = new Dashboard(controller);
-        dashboard.setVisible(true);
-    }
+//    public static void main(String[] args) {
+//        Pharmacy pharmacy = new Pharmacy();
+//        PharmacyController controller = new PharmacyController(pharmacy);
+//        Dashboard dashboard = new Dashboard(controller);
+//        dashboard.setVisible(true);
+//    }
 }
 
 

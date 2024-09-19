@@ -1,22 +1,23 @@
 package fr.pompey.dev.afpa.models;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Client extends Person {
     private String socialSecurityNumber;
-    private String birthDate;
+    private LocalDate birthDate;
     private Mutuelle mutuelle;
-    private Doctor generalDoctor;
+    private Doctor doctor;
     private final List<Specialist> specialists;
 
     public Client(String firstName, String lastName, String address, String city, String postalCode,
-                  String phone, String email, String socialSecurityNumber, String birthDate, Mutuelle mutuelle, Doctor generalDoctor) {
-        super(firstName, lastName, address, city, postalCode, phone, email);
+                  String phone, String email, String socialSecurityNumber, LocalDate birthDate, Mutuelle mutuelle, Doctor Doctor) {
+        super(firstName, lastName, address, city, postalCode, phone, email, socialSecurityNumber, LocalDate.now());
         this.socialSecurityNumber = socialSecurityNumber;
         this.birthDate = birthDate;
         this.mutuelle = mutuelle;
-        this.generalDoctor = generalDoctor;
+        this.doctor = doctor;
         this.specialists = new ArrayList<>();
     }
 
@@ -29,11 +30,11 @@ public class Client extends Person {
         this.socialSecurityNumber = socialSecurityNumber;
     }
 
-    public String getBirthDate() {
-        return birthDate;
+    public LocalDate getBirthDate() {
+        return  LocalDate.now();
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -45,12 +46,12 @@ public class Client extends Person {
         this.mutuelle = mutuelle;
     }
 
-    public Doctor getGeneralDoctor() {
-        return generalDoctor;
+    public Doctor getDoctor() {
+        return doctor;
     }
 
-    public void setGeneralDoctor(Doctor generalDoctor) {
-        this.generalDoctor = generalDoctor;
+    public void setDoctor(Doctor generalDoctor) {
+        this.doctor = generalDoctor;
     }
 
     public List<Specialist> getSpecialists() {

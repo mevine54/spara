@@ -16,45 +16,46 @@ public class HistoryPage extends JFrame {
     public HistoryPage(PharmacyController controller) {
         this.controller = controller;
         setTitle("Pharmacie Sparadrap - Historique des Achats");
-        setSize(400, 300);
+        setSize(500, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(5, 1));
+        panel.setLayout(new BorderLayout());
 
         // Zone pour afficher l'historique des achats
-        JTextArea detailsArea = new JTextArea(10, 30);
-        detailsArea.setEditable(false);
-        panel.add(new JScrollPane(detailsArea));
+        JTextArea historyArea = new JTextArea();
+        historyArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(historyArea);
+        panel.add(scrollPane, BorderLayout.CENTER);
 
         // Bouton pour afficher l'historique des achats
-        JButton btnHistory = new JButton("Afficher l'historique");
-        btnHistory.addActionListener(new ActionListener() {
+        JButton btnAfficher = new JButton("Afficher l'historique");
+        btnAfficher.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 List<Purchase> purchases = controller.getPurchases();
-                StringBuilder detailsText = new StringBuilder();
+                StringBuilder historyText = new StringBuilder();
                 for (Purchase purchase : purchases) {
-                    detailsText.append("Client : ").append(purchase.getClient().getFirstName()).append(" ").append(purchase.getClient().getLastName())
+                    historyText.append("Client : ").append(purchase.getClient().getFirstName()).append(" ").append(purchase.getClient().getLastName())
                             .append("\nMédicament : ").append(purchase.getMedicine().getName())
                             .append("\nDate : ").append(purchase.getDate())
-                            .append("\nPrix : ").append(purchase.getTotalPrice()).append("\n\n");
+                            .append("\nPrix : ").append(purchase.getTotalPrice()).append(" €\n--------------------\n");
                 }
-                detailsArea.setText(detailsText.toString());
+                historyArea.setText(historyText.toString());
             }
         });
-        panel.add(btnHistory);
+        panel.add(btnAfficher, BorderLayout.SOUTH);
 
-        // Bouton pour revenir à la page d'accueil
+        // Bouton retour
         JButton btnRetour = new JButton("Retour");
         btnRetour.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                HomePage homePage = new HomePage(controller);
-                homePage.setVisible(true);
+                Dashboard dashboard = new Dashboard(controller);
+                dashboard.setVisible(true);
                 dispose();  // Fermer la page actuelle
             }
         });
-        panel.add(btnRetour);
+        panel.add(btnRetour, BorderLayout.NORTH);
 
         add(panel);
     }

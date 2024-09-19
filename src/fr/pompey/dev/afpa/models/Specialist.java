@@ -1,5 +1,7 @@
 package fr.pompey.dev.afpa.models;
 
+import java.time.LocalDate;
+
 /**
  * Classe représentant un spécialiste.
  */
@@ -8,7 +10,7 @@ public class Specialist extends Doctor {
 
     public Specialist(String firstName, String lastName, String address, String city, String postalCode,
                       String phone, String email, String registrationNumber, String specialty) {
-        super(firstName, lastName, address, city, postalCode, phone, email, registrationNumber);
+        super(firstName, lastName, address, city, postalCode, phone, email, registrationNumber, LocalDate.now(),registrationNumber);
         this.specialty = specialty;
     }
 

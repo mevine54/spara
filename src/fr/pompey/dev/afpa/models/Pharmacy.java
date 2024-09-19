@@ -105,6 +105,19 @@ public class Pharmacy {
         return mutuelles;
     }
 
+    public void updateClient(Client updatedClient) {
+        for (int i = 0; i < clients.size(); i++) {
+            if (clients.get(i).getSocialSecurityNumber().equals(updatedClient.getSocialSecurityNumber())) {
+                clients.set(i, updatedClient);
+                break;
+            }
+        }
+    }
+
+    public void removeClient(Client client) {
+        clients.remove(client);
+    }
+
     @Override
     public String toString() {
         return "Pharmacy{" +

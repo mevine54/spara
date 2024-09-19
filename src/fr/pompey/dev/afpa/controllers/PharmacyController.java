@@ -84,4 +84,13 @@ public class PharmacyController {
     public void addMutuelle(Mutuelle mutuelle) {
         pharmacy.addMutuelle(mutuelle);
     }
+
+
+    public void updateClient(Client client) {
+    pharmacy.updateClient(client);
+    }
+
+    public  void deleteClient(Client client) {
+        pharmacy.removeClient(client);
+    }
 }

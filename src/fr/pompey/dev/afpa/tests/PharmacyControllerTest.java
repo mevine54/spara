@@ -27,7 +27,7 @@ class PharmacyControllerTest {
     @Test
     void testAddClient() {
         Client client = new Client("Jean", "Dupont", "Rue de la paix", "Paris", "75001",
-                "0102030405", "jean.dupont@gmail.com", "1234567890123", "01/01/1980", null, null);
+                "0102030405", "jean.dupont@gmail.com", "1234567890123", LocalDate.now(), null, null);
         controller.addClient(client);
 
         assertNotNull(controller.getClientByName("Jean"));

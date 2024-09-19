@@ -1,5 +1,7 @@
 package fr.pompey.dev.afpa.models;
 
+import java.time.LocalDate;
+
 /**
  * Classe représentant un médecin traitant.
  */
@@ -7,8 +9,8 @@ public class Doctor extends Person {
     private String registrationNumber;
 
     public Doctor(String firstName, String lastName, String address, String city, String postalCode,
-                  String phone, String email, String registrationNumber) {
-        super(firstName, lastName, address, city, postalCode, phone, email);
+                  String phone, String email, String socialSecurityNumber, LocalDate birthDate, String registrationNumber) {
+        super(firstName, lastName, address, city, postalCode, phone, email, socialSecurityNumber, LocalDate.now());
         this.registrationNumber = registrationNumber;
     }
 

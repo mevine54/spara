@@ -73,7 +73,7 @@ public class ConsoleView {
         }
 
         // Création du nouveau client avec les informations fournies
-        Client newClient = new Client(firstName, lastName, address, city, postalCode, phone, email, socialSecurityNumber, birthDate, selectedMutuelle, doctor);
+        Client newClient = new Client(firstName, lastName, address, city, postalCode, phone, email, socialSecurityNumber, LocalDate.now(), selectedMutuelle, doctor);
 
         // Ajout du client via le contrôleur
         controller.addClient(newClient);
@@ -313,7 +313,7 @@ public class ConsoleView {
             System.out.println("Numéro de sécurité sociale : " + client.getSocialSecurityNumber());
             System.out.println("Date de naissance : " + client.getBirthDate());
             System.out.println("Mutuelle : " + client.getMutuelle().getName() + " - Taux de remboursement : " + client.getMutuelle().getReimbursementRate() + "%");
-            System.out.println("Médecin traitant : " + client.getGeneralDoctor().getFirstName() + " " + client.getGeneralDoctor().getLastName());
+            System.out.println("Médecin traitant : " + client.getDoctor().getFirstName() + " " + client.getDoctor().getLastName());
         } else {
             System.out.println("Client non trouvé.");
         }
