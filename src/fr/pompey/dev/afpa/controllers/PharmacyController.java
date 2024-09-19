@@ -86,10 +86,14 @@ public class PharmacyController {
 
 
     public void updateClient(Client client) {
-    pharmacy.updateClient(client);
+        pharmacy.updateClient(client);
     }
 
     public  void deleteClient(Client client) {
         pharmacy.removeClient(client);
+    }
+
+    public void removePurchase(Purchase selectedPurchase) {
+        pharmacy.removePurchase(selectedPurchase);
     }
 }

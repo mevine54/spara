@@ -118,6 +118,10 @@ public class Pharmacy {
         clients.remove(client);
     }
 
+    public void removePurchase(Purchase selectedPurchase) {
+        purchases.remove(selectedPurchase);
+    }
+
     @Override
     public String toString() {
         return "Pharmacy{" +
@@ -129,4 +133,6 @@ public class Pharmacy {
                 ", purchases=" + purchases +
                 '}';
     }
+
+
 }

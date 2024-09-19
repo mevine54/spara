@@ -352,60 +352,102 @@ public class Dashboard extends JFrame {
         gbc.gridwidth = 2;
         historyPage.add(historyLabel, gbc);
 
-        // Zone de texte pour afficher l'historique
-        JTextArea detailsArea = new JTextArea(10, 30);
-        detailsArea.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(detailsArea);
+        // Liste pour afficher les achats
+        DefaultListModel<Purchase> purchaseListModel = new DefaultListModel<>();
+        List<Purchase> purchases = controller.getPurchases();
+        for (Purchase purchase : purchases) {
+            purchaseListModel.addElement(purchase);
+        }
+        JList<Purchase> purchaseList = new JList<>(purchaseListModel);
+        purchaseList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane scrollPane = new JScrollPane(purchaseList);
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
         historyPage.add(scrollPane, gbc);
 
-        // Récupération des achats et ajout dans l'interface
-        List<Purchase> purchases = controller.getPurchases();
-        StringBuilder detailsText = new StringBuilder();
-        Client client;
-        Doctor doctor;
-        for (Purchase purchase : purchases) {
-            if (purchase.getOrdonnance() != null) {
-                client = purchase.getOrdonnance().getClient();
-                if(purchase.getOrdonnance().getDoctor() != null){
-                    doctor = purchase.getOrdonnance().getDoctor();
-                }else{
-                    doctor = purchase.getOrdonnance().getSpecialist();
-                }
-
-            }else{
-                client = null;
-                doctor = null;
-            }
-            System.out.println(doctor);
-            System.out.println(purchase.getOrdonnance().getDoctor());
-            System.out.println(purchase.getOrdonnance().getSpecialist());
-            String medicamentsStr = "";
-
-            for (Medicine medicine : purchase.getMedicines()) {
-                medicamentsStr += medicine.getName() + " - Quantité: " + medicine.getQuantity() +", ";
-            }
-            String doctorName = (doctor != null && doctor.getLastName() != null && doctor.getFirstName() != null)
-                    ? "\nDocteur : " + doctor.getLastName() + " - " + doctor.getFirstName() :
-                    "\nDoctor : informations indisponibles";
-            String clientName = (client != null) ? client.getFirstName() + " " + client.getLastName() : "Client inconnu";
-            detailsText.append("Client : ").append(clientName)
-                    .append(doctorName)
-                    .append("\nMédicament : ").append(medicamentsStr)
-                    .append("\nTotal : ").append(purchase.getTotalPrice()).append(" €")
-                    .append("\nDate : ").append(purchase.getDate()).append("\n\n");
-
-        }
-        detailsArea.setText(detailsText.toString());
-
-        // Ajout du bouton retour
-        JButton backButton = new JButton("Retour");
+        // Zone de texte pour afficher les détails de l'achat sélectionné
+        JTextArea detailsArea = new JTextArea(10, 30);
+        detailsArea.setEditable(false);
+        JScrollPane detailsScrollPane = new JScrollPane(detailsArea);
         gbc.gridx = 0;
         gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        historyPage.add(detailsScrollPane, gbc);
+
+        // Écouteur pour afficher les détails lorsque l'achat est sélectionné
+        purchaseList.addListSelectionListener(e -> {
+            Purchase selectedPurchase = purchaseList.getSelectedValue();
+            if (selectedPurchase != null) {
+                StringBuilder detailsText = new StringBuilder();
+                Client client = selectedPurchase.getOrdonnance() != null ? selectedPurchase.getOrdonnance().getClient() : null;
+                Doctor doctor = selectedPurchase.getOrdonnance() != null ? selectedPurchase.getOrdonnance().getDoctor() : null;
+
+                String medicamentsStr = "";
+                for (Medicine medicine : selectedPurchase.getMedicines()) {
+                    medicamentsStr += medicine.getName() + " - Quantité: " + medicine.getQuantity() + ", ";
+                }
+
+                String doctorName = (doctor != null) ? "\nDocteur : " + doctor.getLastName() + " " + doctor.getFirstName() : "";
+                String clientName = (client != null) ? client.getFirstName() + " " + client.getLastName() : "Client inconnu";
+
+                detailsText.append("Client : ").append(clientName)
+                        .append(doctorName)
+                        .append("\nMédicaments : ").append(medicamentsStr)
+                        .append("\nTotal : ").append(selectedPurchase.getTotalPrice()).append(" €")
+                        .append("\nDate : ").append(selectedPurchase.getDate()).append("\n\n");
+
+                detailsArea.setText(detailsText.toString());
+            }
+        });
+
+        // Bouton Modifier
+        JButton editButton = new JButton("Modifier");
+        gbc.gridx = 0;
+        gbc.gridy = 3;
         gbc.gridwidth = 1;
+        historyPage.add(editButton, gbc);
+
+        editButton.addActionListener(e -> {
+            Purchase selectedPurchase = purchaseList.getSelectedValue();
+            if (selectedPurchase != null) {
+                // Logique pour modifier l'achat
+                modifyPurchase(selectedPurchase);
+            } else {
+                JOptionPane.showMessageDialog(null, "Veuillez sélectionner un achat à modifier.");
+            }
+        });
+
+        // Bouton Supprimer
+        JButton deleteButton = new JButton("Supprimer");
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        historyPage.add(deleteButton, gbc);
+
+        deleteButton.addActionListener(e -> {
+            Purchase selectedPurchase = purchaseList.getSelectedValue();
+            if (selectedPurchase != null) {
+                // Logique pour supprimer l'achat
+                int confirm = JOptionPane.showConfirmDialog(null, "Êtes-vous sûr de vouloir supprimer cet achat ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    controller.removePurchase(selectedPurchase);
+                    purchaseListModel.removeElement(selectedPurchase);
+                    detailsArea.setText("");
+                    JOptionPane.showMessageDialog(null, "Achat supprimé avec succès.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Veuillez sélectionner un achat à supprimer.");
+            }
+        });
+
+        // Bouton Retour
+        JButton backButton = new JButton("Retour");
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
         historyPage.add(backButton, gbc);
+
         backButton.addActionListener(e -> {
             contentPanel.removeAll();
             contentPanel.revalidate();
@@ -415,6 +457,12 @@ public class Dashboard extends JFrame {
         contentPanel.add(historyPage);
         contentPanel.revalidate();
         contentPanel.repaint();
+    }
+
+    // Méthode pour modifier l'achat (à implémenter)
+    private void modifyPurchase(Purchase purchase) {
+        // Logique pour modifier l'achat (ouvrir un nouveau formulaire de modification, etc.)
+        JOptionPane.showMessageDialog(null, "Fonctionnalité de modification à implémenter.");
     }
 
 
