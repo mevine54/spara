@@ -25,15 +25,16 @@ public class Specialist extends Doctor {
 
     @Override
     public String toString() {
-        return "Specialist{" +
-                "email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", postalCode='" + postalCode + '\'' +
-                ", city='" + city + '\'' +
-                ", address='" + address + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", specialty='" + specialty + '\'' +
-                '}';
+        return lastName +" "+ firstName;
+//        return "Specialist{" +
+//                "email='" + email + '\'' +
+//                ", phone='" + phone + '\'' +
+//                ", postalCode='" + postalCode + '\'' +
+//                ", city='" + city + '\'' +
+//                ", address='" + address + '\'' +
+//                ", lastName='" + lastName + '\'' +
+//                ", firstName='" + firstName + '\'' +
+//                ", specialty='" + specialty + '\'' +
+//                '}';
     }
 }

@@ -16,6 +16,11 @@ public class Dashboard extends JFrame {
     private JPanel contentPanel;
     private List<Medicine> selectedMedicines = new ArrayList<>();
     private double totalPrice = 0;
+    private  JTextField clientNameField;
+    private JTextField phoneField;
+    private JTextField emailField;
+    private JTextField ssnField;
+    private JTextField mutuelleField;
 
     public Dashboard(PharmacyController controller) {
         this.controller = controller;
@@ -231,8 +236,12 @@ public class Dashboard extends JFrame {
             String selectedType = (String) typeAchatCombo.getSelectedItem();
             if (selectedType.equals("Achat direct")) {
                 // Achat direct
+
                 Client client = null;
-                
+//                Client client = new Client(
+//
+//                );
+
                 Medicine selectedMedicine = (Medicine) medicineCombo.getSelectedItem();
                 int quantity = Integer.parseInt(quantityField.getText());
                 double totalPrice = Double.parseDouble(totalValueLabel.getText().replace(" €", ""));
@@ -281,54 +290,30 @@ public class Dashboard extends JFrame {
         gbc.gridy = 9;
         panel.add(clientNameLabel, gbc);
 
-        JTextField clientNameField = new JTextField();
+        JComboBox<Client> clientCombo = new JComboBox<>();
+        List<Client> clients = controller.getClients();
+        for (Client client : clients) {
+            clientCombo.addItem(client);
+        }
         gbc.gridx = 1;
         gbc.gridy = 9;
-        panel.add(clientNameField, gbc);
+        panel.add(clientCombo, gbc);
 
-        // Téléphone
-        JLabel phoneLabel = new JLabel("Téléphone :");
+        // Médecin traitant
+        JLabel doctorLabel = new JLabel("Médecin traitant :");
         gbc.gridx = 0;
         gbc.gridy = 10;
-        panel.add(phoneLabel, gbc);
+        panel.add(doctorLabel, gbc);
 
-        JTextField phoneField = new JTextField();
+
+        JComboBox<Doctor> doctorCombo = new JComboBox<>();
+        List<Doctor> doctors = controller.getDoctors();
+        for (Doctor doctor : doctors) {
+            doctorCombo.addItem(doctor);
+        }
         gbc.gridx = 1;
         gbc.gridy = 10;
-        panel.add(phoneField, gbc);
-
-        // Email
-        JLabel emailLabel = new JLabel("Email :");
-        gbc.gridx = 0;
-        gbc.gridy = 11;
-        panel.add(emailLabel, gbc);
-
-        JTextField emailField = new JTextField();
-        gbc.gridx = 1;
-        gbc.gridy = 11;
-        panel.add(emailField, gbc);
-
-        // Numéro de sécurité sociale
-        JLabel ssnLabel = new JLabel("Numéro de sécurité sociale :");
-        gbc.gridx = 0;
-        gbc.gridy = 12;
-        panel.add(ssnLabel, gbc);
-
-        JTextField ssnField = new JTextField();
-        gbc.gridx = 1;
-        gbc.gridy = 12;
-        panel.add(ssnField, gbc);
-
-        // Mutuelle
-        JLabel mutuelleLabel = new JLabel("Mutuelle :");
-        gbc.gridx = 0;
-        gbc.gridy = 13;
-        panel.add(mutuelleLabel, gbc);
-
-        JTextField mutuelleField = new JTextField();
-        gbc.gridx = 1;
-        gbc.gridy = 13;
-        panel.add(mutuelleField, gbc);
+        panel.add(doctorCombo, gbc);
 
         // Rafraîchir le panneau
         panel.revalidate();

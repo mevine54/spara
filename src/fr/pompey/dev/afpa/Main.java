@@ -39,6 +39,7 @@ public class Main {
         // Ajout des objets créés à la pharmacie
         pharmacy.addClient(client1);
         pharmacy.addDoctor(doctor1);
+        pharmacy.addDoctor(specialist1);
         pharmacy.addMedicine(med1);
         pharmacy.addMedicine(med2);
 
