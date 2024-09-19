@@ -43,8 +43,10 @@ public class Main {
         pharmacy.addMedicine(med1);
         pharmacy.addMedicine(med2);
 
+
         // Lancer l'interface graphique avec Dashboard
         Dashboard dashboard = new Dashboard(controller);
         dashboard.setVisible(true);
+
     }
 }

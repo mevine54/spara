@@ -19,14 +19,6 @@ public class Purchase {
     private Ordonnance ordonnance;
     private List<Medicine> medicines;
 
-//    public Purchase(Client client, Medicine medicine, int quantity, double totalPrice, LocalDate date) {
-//        this.client = client;
-//        this.medicine = medicine;
-//        this.quantity = quantity;
-//        this.totalPrice = totalPrice;
-//        this.date = LocalDate.now();  // Enregistre la date d'achat au moment de la création
-//    }
-
     public Purchase(Ordonnance ordonnance, LocalDate date) {
         this.ordonnance = ordonnance;
         this.medicines = ordonnance.getMedicines();
@@ -64,24 +56,6 @@ public class Purchase {
         return medicines;
     }
 
-
-
-
-//    public Medicine getMedicine() {
-//        return medicine;
-//    }
-
-//    public void setMedicine(Medicine medicine) {
-//        this.medicine = medicine;
-//    }
-//
-//    public int getQuantity() {
-//        return quantity;
-//    }
-
-//    public void setQuantity(int quantity) {
-//        this.quantity = quantity;
-//    }
 
     public double getTotalPrice() {
         return this.totalPrice;

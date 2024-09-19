@@ -1,6 +1,7 @@
 package fr.pompey.dev.afpa.views;
 
 import fr.pompey.dev.afpa.controllers.PharmacyController;
+import fr.pompey.dev.afpa.models.Doctor;
 import fr.pompey.dev.afpa.models.Medicine;
 import fr.pompey.dev.afpa.models.Purchase;
 
@@ -37,11 +38,14 @@ public class HistoryPage extends JFrame {
                 List<Purchase> purchases = controller.getPurchases();
                 StringBuilder historyText = new StringBuilder();
                 for (Purchase purchase : purchases) {
+
                     String medicamentsStr = "";
 
                     for (Medicine medicine : purchase.getMedicines()) {
                         medicamentsStr += medicine.getName() + " - Quantité: " + medicine.getQuantity() +", ";
                     }
+
+
                     if(purchase.getOrdonnance()!= null){
                         historyText.append("Client : ").append(purchase.getOrdonnance().getClient().getFirstName()).append(" ").append(purchase.getOrdonnance().getClient().getLastName())
                                 .append("\nMédicament : ").append(medicamentsStr)

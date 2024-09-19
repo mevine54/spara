@@ -267,11 +267,13 @@ public class Dashboard extends JFrame {
                 if (doctor instanceof Specialist) {
                     ordonnance = new Ordonnance(LocalDate.now(),client.getDoctor(),client,selectedMedicines,(Specialist) doctor);
                 }else{
-                    ordonnance = new Ordonnance(LocalDate.now(),client.getDoctor(),client,selectedMedicines,null);
+                    ordonnance = new Ordonnance(LocalDate.now(),doctor,client,selectedMedicines, doctor instanceof Specialist ? (Specialist) doctor : null);
                 }
                 Purchase purchase = new Purchase(ordonnance);
 
                 controller.addPurchase(purchase);
+                System.out.println(purchase.getOrdonnance().getDoctor());
+                System.out.println(purchase.getOrdonnance().getSpecialist());
 //                totalPrice = 0;
                 JOptionPane.showMessageDialog(null, "Achat validé avec succès !");
             }
@@ -363,23 +365,38 @@ public class Dashboard extends JFrame {
         List<Purchase> purchases = controller.getPurchases();
         StringBuilder detailsText = new StringBuilder();
         Client client;
+        Doctor doctor;
         for (Purchase purchase : purchases) {
             if (purchase.getOrdonnance() != null) {
                 client = purchase.getOrdonnance().getClient();
+                if(purchase.getOrdonnance().getDoctor() != null){
+                    doctor = purchase.getOrdonnance().getDoctor();
+                }else{
+                    doctor = purchase.getOrdonnance().getSpecialist();
+                }
+
             }else{
                 client = null;
+                doctor = null;
             }
+            System.out.println(doctor);
+            System.out.println(purchase.getOrdonnance().getDoctor());
+            System.out.println(purchase.getOrdonnance().getSpecialist());
             String medicamentsStr = "";
 
             for (Medicine medicine : purchase.getMedicines()) {
                 medicamentsStr += medicine.getName() + " - Quantité: " + medicine.getQuantity() +", ";
             }
-
+            String doctorName = (doctor != null && doctor.getLastName() != null && doctor.getFirstName() != null)
+                    ? "\nDocteur : " + doctor.getLastName() + " - " + doctor.getFirstName() :
+                    "\nDoctor : informations indisponibles";
             String clientName = (client != null) ? client.getFirstName() + " " + client.getLastName() : "Client inconnu";
             detailsText.append("Client : ").append(clientName)
+                    .append(doctorName)
                     .append("\nMédicament : ").append(medicamentsStr)
                     .append("\nTotal : ").append(purchase.getTotalPrice()).append(" €")
                     .append("\nDate : ").append(purchase.getDate()).append("\n\n");
+
         }
         detailsArea.setText(detailsText.toString());
 
