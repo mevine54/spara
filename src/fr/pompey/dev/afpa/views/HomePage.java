@@ -18,8 +18,7 @@ public class HomePage extends JFrame {
         setTitle("Pharmacie Sparadrap - Accueil");
         setSize(600, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-//        setResizable(false);
+        setLocationRelativeTo(null);;
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(5, 1, 10, 10));  // Ajouter de l'espace entre les boutons

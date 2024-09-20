@@ -1,11 +1,16 @@
 package fr.pompey.dev.afpa.utilities;
 
+import fr.pompey.dev.afpa.models.Doctor;
+import fr.pompey.dev.afpa.models.Mutuelle;
+import fr.pompey.dev.afpa.views.Dashboard;
+
 import javax.swing.JOptionPane;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class DialogUtils {
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
 
     public static String showInputDialog(String message) {
         return JOptionPane.showInputDialog(null, message);

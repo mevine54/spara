@@ -5,11 +5,13 @@ import fr.pompey.dev.afpa.models.*;
 import fr.pompey.dev.afpa.models.Doctor;
 
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 
 public class Dashboard extends JFrame {
     private PharmacyController controller;
@@ -18,6 +20,7 @@ public class Dashboard extends JFrame {
     private double totalPrice = 0;
     private  JComboBox<Client> clientCombo;
     private  JComboBox<Doctor> doctorCombo;
+    private Label nameField;
 
 
     public Dashboard(PharmacyController controller) {
@@ -204,7 +207,8 @@ public class Dashboard extends JFrame {
                     double medicineTotalPrice = selectedMedicine.calculateTotalPrice();
                     totalPrice += medicineTotalPrice;
                     selectedMedicines.add(selectedMedicine);
-                    addedMedicinesArea.append(selectedMedicine.getName() + " x " + quantity + " : " + medicineTotalPrice + " €\n");
+                    addedMedicinesArea.append(selectedMedicine.getName() + " x " + quantity + " : "
+                            + medicineTotalPrice + " €\n");
                     totalValueLabel.setText(totalPrice + " €");
                 }
             } catch (NumberFormatException ex) {
@@ -238,9 +242,6 @@ public class Dashboard extends JFrame {
                 // Achat direct
 
                 Client client = null;
-//                Client client = new Client(
-//
-//                );
 
                 Medicine selectedMedicineTemp = (Medicine) medicineCombo.getSelectedItem();
                 Medicine selectedMedicine = selectedMedicineTemp.clone();
@@ -258,16 +259,17 @@ public class Dashboard extends JFrame {
                 Doctor doctor = (Doctor) doctorCombo.getSelectedItem();
 
 
-
                 Medicine selectedMedicine = (Medicine) medicineCombo.getSelectedItem();
                 int quantity = Integer.parseInt(quantityField.getText());
                 totalPrice = Double.parseDouble(totalValueLabel.getText().replace(" €", ""));
                 LocalDate date = LocalDate.now();
                 Ordonnance ordonnance;
                 if (doctor instanceof Specialist) {
-                    ordonnance = new Ordonnance(LocalDate.now(),client.getDoctor(),client,selectedMedicines,(Specialist) doctor);
+                    ordonnance = new Ordonnance(LocalDate.now(), client.getDoctor(), client,
+                            selectedMedicines, (Specialist) doctor);
                 }else{
-                    ordonnance = new Ordonnance(LocalDate.now(),doctor,client,selectedMedicines, doctor instanceof Specialist ? (Specialist) doctor : null);
+                    ordonnance = new Ordonnance(LocalDate.now(), doctor, client, selectedMedicines,
+                            doctor instanceof Specialist ? (Specialist) doctor : null);
                 }
                 Purchase purchase = new Purchase(ordonnance);
 
@@ -298,7 +300,6 @@ public class Dashboard extends JFrame {
     }
 
     private void showOrdonnanceFields(JPanel panel, GridBagConstraints gbc) {
-        // Champs spécifiques pour un achat avec ordonnance (client details)
 
         // Nom du client
         JLabel clientNameLabel = new JLabel("Nom du client :");
@@ -381,16 +382,20 @@ public class Dashboard extends JFrame {
             Purchase selectedPurchase = purchaseList.getSelectedValue();
             if (selectedPurchase != null) {
                 StringBuilder detailsText = new StringBuilder();
-                Client client = selectedPurchase.getOrdonnance() != null ? selectedPurchase.getOrdonnance().getClient() : null;
-                Doctor doctor = selectedPurchase.getOrdonnance() != null ? selectedPurchase.getOrdonnance().getDoctor() : null;
+                Client client = selectedPurchase.getOrdonnance() != null ? selectedPurchase
+                        .getOrdonnance().getClient() : null;
+                Doctor doctor = selectedPurchase.getOrdonnance() != null ? selectedPurchase
+                        .getOrdonnance().getDoctor() : null;
 
                 String medicamentsStr = "";
                 for (Medicine medicine : selectedPurchase.getMedicines()) {
                     medicamentsStr += medicine.getName() + " - Quantité: " + medicine.getQuantity() + ", ";
                 }
 
-                String doctorName = (doctor != null) ? "\nDocteur : " + doctor.getLastName() + " " + doctor.getFirstName() : "";
-                String clientName = (client != null) ? client.getFirstName() + " " + client.getLastName() : "Client inconnu";
+                String doctorName = (doctor != null) ? "\nDocteur : " + doctor.getLastName() + " "
+                        + doctor.getFirstName() : "";
+                String clientName = (client != null) ? client.getFirstName() + " "
+                        + client.getLastName() : "Client inconnu";
 
                 detailsText.append("Client : ").append(clientName)
                         .append(doctorName)
@@ -415,7 +420,8 @@ public class Dashboard extends JFrame {
                 // Logique pour modifier l'achat
                 modifyPurchase(selectedPurchase);
             } else {
-                JOptionPane.showMessageDialog(null, "Veuillez sélectionner un achat à modifier.");
+                JOptionPane.showMessageDialog(null,
+                        "Veuillez sélectionner un achat à modifier.");
             }
         });
 
@@ -429,15 +435,19 @@ public class Dashboard extends JFrame {
             Purchase selectedPurchase = purchaseList.getSelectedValue();
             if (selectedPurchase != null) {
                 // Logique pour supprimer l'achat
-                int confirm = JOptionPane.showConfirmDialog(null, "Êtes-vous sûr de vouloir supprimer cet achat ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                int confirm = JOptionPane.showConfirmDialog(null,
+                        "Êtes-vous sûr de vouloir supprimer cet achat ?", "Confirmation",
+                        JOptionPane.YES_NO_OPTION);
                 if (confirm == JOptionPane.YES_OPTION) {
                     controller.removePurchase(selectedPurchase);
                     purchaseListModel.removeElement(selectedPurchase);
                     detailsArea.setText("");
-                    JOptionPane.showMessageDialog(null, "Achat supprimé avec succès.");
+                    JOptionPane.showMessageDialog(null,
+                            "Achat supprimé avec succès.");
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Veuillez sélectionner un achat à supprimer.");
+                JOptionPane.showMessageDialog(null,
+                        "Veuillez sélectionner un achat à supprimer.");
             }
         });
 
@@ -461,7 +471,7 @@ public class Dashboard extends JFrame {
 
     // Méthode pour modifier l'achat (à implémenter)
     private void modifyPurchase(Purchase purchase) {
-        // Logique pour modifier l'achat (ouvrir un nouveau formulaire de modification, etc.)
+        // Logique pour modifier l'achat (ouvrir un nouveau formulaire de modification)
         JOptionPane.showMessageDialog(null, "Fonctionnalité de modification à implémenter.");
     }
 
@@ -528,9 +538,10 @@ public class Dashboard extends JFrame {
         gbc.gridwidth = 1;
         clientPage.add(addButton, gbc);
 
+        DateTimeFormatter formatter = null;
         addButton.addActionListener(e -> {
             // Logique pour créer un nouveau client
-            createOrModifyClient(null, clientListModel);
+            createOrModifyClient(null, clientListModel, formatter);
         });
 
         // Bouton Modifier
@@ -543,9 +554,10 @@ public class Dashboard extends JFrame {
             Client selectedClient = clientList.getSelectedValue();
             if (selectedClient != null) {
                 // Logique pour modifier le client
-                createOrModifyClient(selectedClient, clientListModel);
+                createOrModifyClient(selectedClient, clientListModel, formatter);
             } else {
-                JOptionPane.showMessageDialog(null, "Veuillez sélectionner un client à modifier.");
+                JOptionPane.showMessageDialog(null,
+                        "Veuillez sélectionner un client à modifier.");
             }
         });
 
@@ -559,7 +571,9 @@ public class Dashboard extends JFrame {
         deleteButton.addActionListener(e -> {
             Client selectedClient = clientList.getSelectedValue();
             if (selectedClient != null) {
-                int confirm = JOptionPane.showConfirmDialog(null, "Êtes-vous sûr de vouloir supprimer ce client ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                int confirm = JOptionPane.showConfirmDialog(null,
+                        "Êtes-vous sûr de vouloir supprimer ce client ?",
+                        "Confirmation", JOptionPane.YES_NO_OPTION);
                 if (confirm == JOptionPane.YES_OPTION) {
                     controller.removeClient(selectedClient);  // Méthode pour supprimer le client depuis le contrôleur
                     clientListModel.removeElement(selectedClient);
@@ -567,7 +581,8 @@ public class Dashboard extends JFrame {
                     JOptionPane.showMessageDialog(null, "Client supprimé avec succès.");
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Veuillez sélectionner un client à supprimer.");
+                JOptionPane.showMessageDialog(null,
+                        "Veuillez sélectionner un client à supprimer.");
             }
         });
 
@@ -590,19 +605,31 @@ public class Dashboard extends JFrame {
     }
 
     // Méthode pour créer ou modifier un client
-    private void createOrModifyClient(Client client, DefaultListModel<Client> clientListModel) {
+    private void createOrModifyClient(Client client, DefaultListModel<Client> clientListModel, DateTimeFormatter formatter) {
         JTextField lastNameField = new JTextField(20);
         JTextField firstNameField = new JTextField(20);
         JTextField addressField = new JTextField(20);
-        JTextField phoneNumberField = new JTextField(20);
+        JTextField cityField = new JTextField(20);
+        JTextField postalCodeField = new JTextField(20);
+        JTextField phoneField = new JTextField(20);
         JTextField emailField = new JTextField(20);
+        JTextField socialSecurityNumberField = new JTextField(20);
+        JTextField birthDateField = new JTextField(20);
+        JTextField mutuelleField = new JTextField(20);
+        JTextField doctorField = new JTextField(20);
 
         if (client != null) {
             lastNameField.setText(client.getLastName());
             firstNameField.setText(client.getFirstName());
             addressField.setText(client.getAddress());
-            phoneNumberField.setText(client.getPhone());
+            cityField.setText(client.getCity());
+            postalCodeField.setText(client.getPostalCode());
+            phoneField.setText(client.getPhone());
             emailField.setText(client.getEmail());
+            socialSecurityNumberField.setText(client.getSocialSecurityNumber());
+            birthDateField.setText(String.valueOf(client.getBirthDate()));
+            mutuelleField.setText(String.valueOf(client.getMutuelle()));
+            doctorField.setText(String.valueOf(client.getDoctor()));
         }
 
         JPanel panel = new JPanel(new GridLayout(5, 2));
@@ -612,15 +639,43 @@ public class Dashboard extends JFrame {
         panel.add(firstNameField);
         panel.add(new JLabel("Adresse :"));
         panel.add(addressField);
+        panel.add(new JLabel("City :"));
+        panel.add(cityField);
+        panel.add(new JLabel("PostalCode :"));
+        panel.add(postalCodeField);
         panel.add(new JLabel("Téléphone :"));
-        panel.add(phoneNumberField);
+        panel.add(phoneField);
         panel.add(new JLabel("Email :"));
         panel.add(emailField);
+        panel.add(new JLabel("Social Security Number :"));
+        panel.add(socialSecurityNumberField);
+        panel.add(new JLabel("Birth Date :"));
+        panel.add(birthDateField);
+        panel.add(new JLabel("Mutuelle :"));
+        panel.add(mutuelleField);
+        panel.add(new JLabel("Doctor :"));
+        panel.add(doctorField);
 
-        int result = JOptionPane.showConfirmDialog(null, panel, client == null ? "Créer un nouveau client" : "Modifier le client", JOptionPane.OK_CANCEL_OPTION);
+        LocalDate birthDate = LocalDate.parse(birthDateField.getText(), formatter);
+        Label departmentField = new Label();
+        double reimbursementRateDouble = Double.parseDouble(mutuelleField.getText());
+        Mutuelle mutuelle = new Mutuelle(nameField.getText(), addressField.getText(), cityField.getText(),
+                postalCodeField.getText(), phoneField.getText(), emailField.getText(), departmentField.getText(),
+                reimbursementRateDouble);
+        Label registrationNumber = new Label();
+        Doctor doctor = new Doctor(firstNameField.getText(), lastNameField.getText(), addressField.getText(),
+                cityField.getText(), postalCodeField.getText(), phoneField.getText(), emailField.getText(),
+                socialSecurityNumberField.getText(), birthDate, registrationNumber.getText());
+
+
+        int result = JOptionPane.showConfirmDialog(null, panel, client == null ?
+                "Créer un nouveau client" : "Modifier le client", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
             if (client == null) {
-                client = new Client(lastNameField.getText(), firstNameField.getText(), addressField.getText(), phoneNumberField.getText(), emailField.getText());
+                client = new Client(lastNameField.getText(), firstNameField.getText(),
+                        addressField.getText(), cityField.getText(), postalCodeField.getText(), phoneField.getText(),
+                        emailField.getText(), socialSecurityNumberField.getText(), birthDate,
+                        mutuelle, doctor);
                 controller.addClient(client);  // Méthode pour ajouter le client via le contrôleur
                 clientListModel.addElement(client);
                 JOptionPane.showMessageDialog(null, "Client créé avec succès.");
@@ -628,7 +683,7 @@ public class Dashboard extends JFrame {
                 client.setLastName(lastNameField.getText());
                 client.setFirstName(firstNameField.getText());
                 client.setAddress(addressField.getText());
-                client.setPhone(phoneNumberField.getText());
+                client.setPhone(phoneField.getText());
                 client.setEmail(emailField.getText());
                 controller.updateClient(client);  // Méthode pour mettre à jour le client via le contrôleur
                 clientListModel.setElementAt(client, clientListModel.indexOf(client));

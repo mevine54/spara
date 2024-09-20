@@ -5,17 +5,19 @@ import fr.pompey.dev.afpa.controllers.PharmacyController;
 import fr.pompey.dev.afpa.models.Client;
 import fr.pompey.dev.afpa.models.Doctor;
 import fr.pompey.dev.afpa.models.Mutuelle;
+import fr.pompey.dev.afpa.utilities.ValidationUtils;
+import fr.pompey.dev.afpa.utilities.DialogUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Date;
 
 public class ClientPage extends JFrame {
-
+    DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private PharmacyController controller;
     private JComboBox<Client> comboClient;
     private JTextArea detailsArea;
@@ -132,14 +134,57 @@ public class ClientPage extends JFrame {
                 "Médecin traitant:", doctorCombo
         };
 
-        int option = JOptionPane.showConfirmDialog(null, fields, "Créer un nouveau client", JOptionPane.OK_CANCEL_OPTION);
+
+
+        int option = JOptionPane.showConfirmDialog(null, fields, "Créer un nouveau client",
+                JOptionPane.OK_CANCEL_OPTION);
 
         if (option == JOptionPane.OK_OPTION) {
+            // Récupération des textes des champs
+            String firstName = firstNameField.getText();
+            String lastName = lastNameField.getText();
+            String address = addressField.getText();
+            String city = cityField.getText();
+            String postalCode = postalCodeField.getText();
+            String phone = phoneField.getText();
+            String email = emailField.getText();
+            String ssn = ssnField.getText();
+            String birthDate = birthDateField.getText();
+
+            // Validation des champs
+            if (!ValidationUtils.isValidName(firstNameField.getText())) {
+                System.out.println("Erreur: Prénom non valide");
+                return;
+            }
+
+            if (!ValidationUtils.isValidName(lastNameField.getText())) {
+                System.out.println("Erreur: Nom non valide");
+                return;
+            }
+
+            if (!ValidationUtils.isValidAddress(address)) {
+                System.out.println("Erreur: Adresse non valide");
+                return;
+            }
+
+            if (!ValidationUtils.isValidCity(cityField.getText())) {
+                System.out.println("Erreur: Ville non valide");
+                return;
+            }
+
+            if (!ValidationUtils.isValidName(postalCodeField.getText())) {
+                System.out.println("Erreur: Code postal non valide");
+                return;
+            }
+
+            if (!ValidationUtils.is)
             Mutuelle selectedMutuelle = (Mutuelle) mutuelleCombo.getSelectedItem();
             Doctor selectedDoctor = (Doctor) doctorCombo.getSelectedItem();
 
-            Client newClient = new Client(firstNameField.getText(), lastNameField.getText(), addressField.getText(), cityField.getText(), postalCodeField.getText(),
-                    phoneField.getText(), emailField.getText(), ssnField.getText(), LocalDate.parse(birthDateField.getText()), selectedMutuelle, selectedDoctor );
+            Client newClient = new Client(firstNameField.getText(), lastNameField.getText(), addressField.getText(),
+                    cityField.getText(), postalCodeField.getText(),
+                    phoneField.getText(), emailField.getText(), ssnField.getText(),
+                    LocalDate.parse(birthDateField.getText()), selectedMutuelle, selectedDoctor );
             controller.addClient(newClient);
             updateClientList();
             JOptionPane.showMessageDialog(this, "Client créé avec succès !");
@@ -176,7 +221,8 @@ public class ClientPage extends JFrame {
                     "Numéro de sécurité sociale:", ssnField
             };
 
-            int option = JOptionPane.showConfirmDialog(null, fields, "Modifier le client", JOptionPane.OK_CANCEL_OPTION);
+            int option = JOptionPane.showConfirmDialog(null, fields, "Modifier le client",
+                    JOptionPane.OK_CANCEL_OPTION);
 
             if (option == JOptionPane.OK_OPTION) {
                 selectedClient.setFirstName(firstNameField.getText());
@@ -199,7 +245,9 @@ public class ClientPage extends JFrame {
     private void removeClient() {
         Client selectedClient = (Client) comboClient.getSelectedItem();
         if (selectedClient != null) {
-            int option = JOptionPane.showConfirmDialog(this, "Êtes-vous sûr de vouloir supprimer ce client ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+            int option = JOptionPane.showConfirmDialog(this,
+                    "Êtes-vous sûr de vouloir supprimer ce client ?", "Confirmation",
+                    JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {
                 controller.deleteClient(selectedClient);
                 updateClientList();  // Rafraîchir la liste des clients

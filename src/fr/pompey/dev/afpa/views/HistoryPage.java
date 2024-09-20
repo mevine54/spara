@@ -47,10 +47,12 @@ public class HistoryPage extends JFrame {
 
 
                     if(purchase.getOrdonnance()!= null){
-                        historyText.append("Client : ").append(purchase.getOrdonnance().getClient().getFirstName()).append(" ").append(purchase.getOrdonnance().getClient().getLastName())
+                        historyText.append("Client : ").append(purchase.getOrdonnance().getClient().getFirstName())
+                                .append(" ").append(purchase.getOrdonnance().getClient().getLastName())
                                 .append("\nMédicament : ").append(medicamentsStr)
                                 .append("\nDate : ").append(purchase.getDate())
-                                .append("\nPrix : ").append(purchase.getTotalPrice()).append(" €\n--------------------\n");
+                                .append("\nPrix : ").append(purchase.getTotalPrice())
+                                .append(" €\n--------------------\n");
                     } else{
 
                     }
@@ -67,7 +69,7 @@ public class HistoryPage extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Dashboard dashboard = new Dashboard(controller);
                 dashboard.setVisible(true);
-                dispose();  // Fermer la page actuelle
+                dispose();
             }
         });
         panel.add(btnRetour, BorderLayout.NORTH);

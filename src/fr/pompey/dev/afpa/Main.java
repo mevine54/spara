@@ -29,12 +29,15 @@ public class Main {
                 70.0);
 
         Client client1 = new Client("Marie", "Curie", "42 rue de la science",
-                "Paris", "75001", "0606060606", "marie.curie@science.com", "9876543210987", LocalDate.now(), mutuelle1, doctor1);
+                "Paris", "75001", "0606060606", "marie.curie@science.com",
+                "9876543210987", LocalDate.now(), mutuelle1, doctor1);
         client1.addSpecialist(specialist1);
 
         // Création de quelques médicaments
-        Medicine med1 = new Medicine("Doliprane", MedicineCategory.ANALGESIC, 2.5, LocalDate.now(), 100);
-        Medicine med2 = new Medicine("Amoxicilline", MedicineCategory.ANTIBIOTIC, 12.0, LocalDate.now(), 50);
+        Medicine med1 = new Medicine("Doliprane", MedicineCategory.ANALGESIC, 2.5, LocalDate.now(),
+                100);
+        Medicine med2 = new Medicine("Amoxicilline", MedicineCategory.ANTIBIOTIC, 12.0, LocalDate.now(),
+                50);
 
         // Ajout des objets créés à la pharmacie
         pharmacy.addClient(client1);

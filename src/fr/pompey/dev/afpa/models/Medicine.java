@@ -76,6 +76,6 @@ public class Medicine {
 
     @Override
     public String toString() {
-        return name;  // Retourner le nom du médicament
+        return name;  // Retourne le nom du médicament
     }
 }

@@ -84,7 +84,6 @@ public class PharmacyController {
         pharmacy.addMutuelle(mutuelle);
     }
 
-
     public void updateClient(Client client) {
         pharmacy.updateClient(client);
     }

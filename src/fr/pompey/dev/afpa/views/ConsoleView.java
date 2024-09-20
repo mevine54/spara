@@ -73,7 +73,8 @@ public class ConsoleView {
         }
 
         // Création du nouveau client avec les informations fournies
-        Client newClient = new Client(firstName, lastName, address, city, postalCode, phone, email, socialSecurityNumber, LocalDate.now(), selectedMutuelle, doctor);
+        Client newClient = new Client(firstName, lastName, address, city, postalCode, phone, email,
+                socialSecurityNumber, LocalDate.now(), selectedMutuelle, doctor);
 
         // Ajout du client via le contrôleur
         controller.addClient(newClient);
@@ -92,7 +93,8 @@ public class ConsoleView {
         System.out.println("Veuillez sélectionner une mutuelle parmi la liste suivante :");
         for (int i = 0; i < availableMutuelles.size(); i++) {
             Mutuelle mutuelle = availableMutuelles.get(i);
-            System.out.println((i + 1) + ". " + mutuelle.getName() + " - Taux de remboursement : " + mutuelle.getReimbursementRate() + "%");
+            System.out.println((i + 1) + ". " + mutuelle.getName() + " - Taux de remboursement : "
+                    + mutuelle.getReimbursementRateDouble() + "%");
         }
 
         int mutuelleIndex = scanner.nextInt() - 1;
@@ -229,7 +231,8 @@ public class ConsoleView {
         System.out.println("Voici les médicaments disponibles :");
         for (int i = 0; i < availableMedicines.size(); i++) {
             Medicine med = availableMedicines.get(i);
-            System.out.println((i + 1) + ". " + med.getName() + " (" + med.getCategory() + ") - Prix unitaire : " + med.getPrice() + " €");
+            System.out.println((i + 1) + ". " + med.getName() + " (" + med.getCategory() + ") - Prix unitaire : "
+                    + med.getPrice() + " €");
         }
 
         List<Medicine> selectedMedicines = new ArrayList<>();
@@ -288,7 +291,8 @@ public class ConsoleView {
 
             // Vérifier si le client ou le médecin est null avant d'afficher
             if (client != null && doctor != null) {
-                System.out.println("Ordonnance pour le client : " + client.getFirstName() + " " + client.getLastName() +
+                System.out.println("Ordonnance pour le client : " + client.getFirstName() + " "
+                        + client.getLastName() +
                         ", Médecin : " + doctor.getFirstName() + " " + doctor.getLastName() +
                         ", Date : " + ordonnance.getDate());
             } else {
@@ -312,8 +316,10 @@ public class ConsoleView {
             System.out.println("Email : " + client.getEmail());
             System.out.println("Numéro de sécurité sociale : " + client.getSocialSecurityNumber());
             System.out.println("Date de naissance : " + client.getBirthDate());
-            System.out.println("Mutuelle : " + client.getMutuelle().getName() + " - Taux de remboursement : " + client.getMutuelle().getReimbursementRate() + "%");
-            System.out.println("Médecin traitant : " + client.getDoctor().getFirstName() + " " + client.getDoctor().getLastName());
+            System.out.println("Mutuelle : " + client.getMutuelle().getName() + " - Taux de remboursement : "
+                    + client.getMutuelle().getReimbursementRateDouble() + "%");
+            System.out.println("Médecin traitant : " + client.getDoctor().getFirstName() + " "
+                    + client.getDoctor().getLastName());
         } else {
             System.out.println("Client non trouvé.");
         }

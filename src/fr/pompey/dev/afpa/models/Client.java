@@ -12,7 +12,8 @@ public class Client extends Person {
     private final List<Specialist> specialists;
 
     public Client(String firstName, String lastName, String address, String city, String postalCode,
-                  String phone, String email, String socialSecurityNumber, LocalDate birthDate, Mutuelle mutuelle, Doctor Doctor) {
+                  String phone, String email, String socialSecurityNumber, LocalDate birthDate,
+                  Mutuelle mutuelle, Doctor Doctor) {
         super(firstName, lastName, address, city, postalCode, phone, email, socialSecurityNumber, LocalDate.now());
         this.socialSecurityNumber = socialSecurityNumber;
         this.birthDate = birthDate;
@@ -35,7 +36,7 @@ public class Client extends Person {
     }
 
     public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
+        this.birthDate = LocalDate.parse(String.valueOf(birthDate));
     }
 
     public Mutuelle getMutuelle() {
@@ -64,6 +65,6 @@ public class Client extends Person {
 
     @Override
     public String toString() {
-        return  lastName + " " + firstName;  // Retourner le nom complet
+        return  lastName + " " + firstName;
     }
 }

@@ -11,10 +11,10 @@ public class Mutuelle {
     private String phone;
     private String email;
     private String department;
-    private double reimbursementRate;
+    private double reimbursementRateDouble;
 
     public Mutuelle(String name, String address, String city, String postalCode, String phone, String email,
-                    String department, double reimbursementRate) {
+                    String department, double reimbursementRateDouble) {
         this.name = name;
         this.address = address;
         this.city = city;
@@ -22,7 +22,7 @@ public class Mutuelle {
         this.phone = phone;
         this.email = email;
         this.department = department;
-        this.reimbursementRate = reimbursementRate;
+        this.reimbursementRateDouble = reimbursementRateDouble;
     }
 
     // Getters et Setters
@@ -82,12 +82,12 @@ public class Mutuelle {
         this.department = department;
     }
 
-    public double getReimbursementRate() {
-        return reimbursementRate;
+    public double getReimbursementRateDouble() {
+        return reimbursementRateDouble;
     }
 
-    public void setReimbursementRate(double reimbursementRate) {
-        this.reimbursementRate = reimbursementRate;
+    public void setReimbursementRate(double reimbursementRateDouble) {
+        this.reimbursementRateDouble = reimbursementRateDouble;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class Mutuelle {
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", department='" + department + '\'' +
-                ", reimbursementRate=" + reimbursementRate +
+                ", reimbursementRate=" + reimbursementRateDouble +
                 '}';
     }
 }
