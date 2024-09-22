@@ -4,7 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Classe représentant une ordonnance.
+ * Représente une ordonnance délivrée par un médecin pour un client.
+ * Une ordonnance contient une liste de médicaments prescrits.
  */
 public class Ordonnance {
     private LocalDate date;
@@ -13,6 +14,15 @@ public class Ordonnance {
     private List<Medicine> medicines;
     private Specialist specialist;
 
+    /**
+     * Constructeur de la classe Ordonnance.
+     *
+     * @param date        La date de l'ordonnance.
+     * @param doctor      Le médecin ayant prescrit l'ordonnance.
+     * @param client      Le client pour qui l'ordonnance est prescrite.
+     * @param medicines   La liste des médicaments prescrits.
+     * @param specialist  Le spécialiste associé à l'ordonnance (facultatif).
+     */
     public Ordonnance(LocalDate date, Doctor doctor, Client client, List<Medicine> medicines, Specialist specialist) {
         this.date = date;
         this.doctor = doctor;
@@ -22,6 +32,11 @@ public class Ordonnance {
     }
 
     // Getters et Setters
+    /**
+     * Retourne la date de l'ordonnance.
+     *
+     * @return La date de l'ordonnance.
+     */
     public LocalDate getDate() {
         return date;
     }
@@ -30,6 +45,11 @@ public class Ordonnance {
         this.date = date;
     }
 
+    /**
+     * Retourne le médecin ayant prescrit l'ordonnance.
+     *
+     * @return Le médecin.
+     */
     public Doctor getDoctor() {
         return doctor;
     }
@@ -38,6 +58,11 @@ public class Ordonnance {
         this.doctor = doctor;
     }
 
+    /**
+     * Retourne le client associé à l'ordonnance.
+     *
+     * @return Le client.
+     */
     public Client getClient() {
         return client;
     }
@@ -46,6 +71,11 @@ public class Ordonnance {
         this.client = client;
     }
 
+    /**
+     * Retourne la liste des médicaments prescrits dans l'ordonnance.
+     *
+     * @return La liste des médicaments.
+     */
     public List<Medicine> getMedicines() {
         return medicines;
     }
@@ -54,6 +84,11 @@ public class Ordonnance {
         this.medicines = medicines;
     }
 
+    /**
+     * Retourne le spécialiste associé à l'ordonnance, le cas échéant.
+     *
+     * @return Le spécialiste ou null si aucun spécialiste n'est associé.
+     */
     public Specialist getSpecialist() {
         return specialist;
     }

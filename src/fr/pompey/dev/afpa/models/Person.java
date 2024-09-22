@@ -3,7 +3,8 @@ package fr.pompey.dev.afpa.models;
 import java.time.LocalDate;
 
 /**
- * Classe abstraite Person qui sert de base pour les clients, médecins et spécialistes.
+ * Classe abstraite représentant une personne générique.
+ * Cette classe est héritée par les classes spécifiques telles que Client et Doctor.
  */
 public abstract class Person {
     protected String firstName;
@@ -16,6 +17,19 @@ public abstract class Person {
     protected String socialSecurityNumber;
     protected LocalDate birthDate;
 
+    /**
+     * Constructeur de la classe Person.
+     *
+     * @param firstName            Le prénom de la personne.
+     * @param lastName             Le nom de la personne.
+     * @param address              L'adresse de la personne.
+     * @param city                 La ville de résidence.
+     * @param postalCode           Le code postal.
+     * @param phone                Le numéro de téléphone.
+     * @param email                L'email de la personne.
+     * @param socialSecurityNumber Le numéro de sécurité sociale.
+     * @param birthDate            La date de naissance.
+     */
     public Person(String firstName, String lastName, String address, String city, String postalCode,
                   String phone, String email, String socialSecurityNumber, LocalDate birthDate) {
         this.firstName = firstName;

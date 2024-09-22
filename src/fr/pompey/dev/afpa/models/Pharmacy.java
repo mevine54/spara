@@ -14,6 +14,9 @@ public class Pharmacy {
     private List<Mutuelle> mutuelles;
     private List<Purchase> purchases;  // Ajout de la liste des achats
 
+    /**
+     * Constructeur par défaut initialisant les listes pour les entités de la pharmacie.
+     */
     public Pharmacy() {
         this.clients = new ArrayList<>();
         this.doctors = new ArrayList<>();
@@ -23,11 +26,20 @@ public class Pharmacy {
         this.purchases = new ArrayList<>();  // Initialisation de la liste des achats
     }
 
+    /**
+     * Ajoute un achat à la liste des achats.
+     *
+     * @param purchase L'achat à ajouter.
+     */
     // Ajout d'un achat
     public void addPurchase(Purchase purchase) {
         purchases.add(purchase);
     }
-
+    /**
+     * Retourne la liste de tous les achats effectués.
+     *
+     * @return La liste des achats.
+     */
     // Récupérer la liste des achats
     public List<Purchase> getPurchases() {
         return purchases;
@@ -41,10 +53,6 @@ public class Pharmacy {
     public List<Client> getClients() {
         return clients;
     }
-
-//    public Client getClientByName(String name) {
-//        return clients.stream().filter(c -> c.getFirstName().equalsIgnoreCase(name)).findFirst().orElse(null);
-//    }
 
     public Client getClientByName(String name) {
         // Parcourt la liste des clients et retourne celui dont le nom correspond

@@ -33,6 +33,13 @@ public class Purchase {
         setTotalPrice();
     }
 
+    /**
+     * Constructeur de la classe Purchase.
+     *
+     * @param medicines La liste de médicaments achetés.
+     * @param date      La date de l'achat.
+     * @throws SaisieException Si la liste de médicaments est vide ou si la date est invalide.
+     */
     public Purchase(List<Medicine> medicines, LocalDate date) throws SaisieException {
         if (medicines == null || medicines.isEmpty()) {
             throw new SaisieException("La liste de médicaments ne peut pas être vide !");
@@ -71,6 +78,9 @@ public class Purchase {
         setTotalPrice(); // Recalculer le total quand les médicaments sont modifiés
     }
 
+    /**
+     * Calcule et définit le prix total de l'achat.
+     */
     private void setTotalPrice() {
         this.totalPrice = medicines.stream().mapToDouble(Medicine::calculateTotalPrice).sum();
     }

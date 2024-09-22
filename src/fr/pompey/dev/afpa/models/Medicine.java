@@ -5,7 +5,7 @@ import fr.pompey.dev.afpa.enums.MedicineCategory;
 import fr.pompey.dev.afpa.exceptions.SaisieException;
 
 /**
- * Classe représentant un médicament.
+ * Classe représentant un médicament disponible dans la pharmacie.
  */
 public class Medicine {
     private String name;
@@ -14,6 +14,14 @@ public class Medicine {
     private LocalDate releaseDate;
     private int quantity;
 
+    /**
+     * Constructeur de la classe Medicine.
+     *
+     * @param name     Le nom du médicament.
+     * @param category La catégorie du médicament.
+     * @param price    Le prix unitaire du médicament.
+     * @param quantity La quantité de médicament.
+     */
     public Medicine(String name, MedicineCategory category, double price, LocalDate releaseDate, int quantity) throws SaisieException {
         if (name == null || name.trim().isEmpty()) {
             throw new SaisieException("Le nom du médicament ne peut pas être vide !");
@@ -37,9 +45,13 @@ public class Medicine {
         this.quantity = quantity;
     }
 
-    // Calculer le prix total pour une quantité donnée
+    /**
+     * Retourne le prix total du médicament en fonction de la quantité.
+     *
+     * @return Le prix total pour la quantité.
+     */
     public double calculateTotalPrice() {
-        return price * quantity;
+        return this.price * this.quantity;
     }
 
     // Getters et Setters

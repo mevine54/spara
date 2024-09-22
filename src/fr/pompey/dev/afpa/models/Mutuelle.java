@@ -1,7 +1,8 @@
 package fr.pompey.dev.afpa.models;
 
 /**
- * Classe représentant une mutuelle.
+ * Représente une mutuelle à laquelle un client peut souscrire.
+ * Une mutuelle offre un taux de remboursement pour les frais de santé.
  */
 public class Mutuelle {
     private String name;
@@ -13,6 +14,18 @@ public class Mutuelle {
     private String department;
     private double reimbursementRateDouble;
 
+    /**
+     * Constructeur de la classe Mutuelle.
+     *
+     * @param name Le nom de la mutuelle.
+     * @param address L'adresse de la mutuelle.
+     * @param city La ville de la mutuelle.
+     * @param postalCode Le code postal de la mutuelle.
+     * @param phone Le numéro de téléphone de la mutuelle.
+     * @param email L'email de la mutuelle.
+     * @param department Le département de la mutuelle.
+     * @param reimbursementRateDouble Le taux de remboursement de la mutuelle.
+     */
     public Mutuelle(String name, String address, String city, String postalCode, String phone, String email,
                     String department, double reimbursementRateDouble) {
         this.name = name;
@@ -26,6 +39,11 @@ public class Mutuelle {
     }
 
     // Getters et Setters
+    /**
+     * Retourne le nom de la mutuelle.
+     *
+     * @return Le nom de la mutuelle.
+     */
     public String getName() {
         return name;
     }
@@ -82,6 +100,11 @@ public class Mutuelle {
         this.department = department;
     }
 
+    /**
+     * Retourne le taux de remboursement de la mutuelle.
+     *
+     * @return Le taux de remboursement.
+     */
     public double getReimbursementRateDouble() {
         return reimbursementRateDouble;
     }
@@ -90,17 +113,13 @@ public class Mutuelle {
         this.reimbursementRateDouble = reimbursementRateDouble;
     }
 
+    /**
+     * Retourne une représentation sous forme de chaîne de caractères de la mutuelle.
+     *
+     * @return Les informations de la mutuelle sous forme de chaîne.
+     */
     @Override
     public String toString() {
-        return "Mutuelle{" +
-                "name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", city='" + city + '\'' +
-                ", postalCode='" + postalCode + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", department='" + department + '\'' +
-                ", reimbursementRate=" + reimbursementRateDouble +
-                '}';
+        return name + " - " + reimbursementRateDouble + "% de remboursement";
     }
 }

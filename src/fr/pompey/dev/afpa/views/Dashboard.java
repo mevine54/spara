@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Classe représentant le tableau de bord de la pharmacie.
+ */
 public class Dashboard extends JFrame {
     private PharmacyController controller;
     private JPanel contentPanel;
@@ -24,7 +27,11 @@ public class Dashboard extends JFrame {
     private  JComboBox<Doctor> doctorCombo;
     private Label nameField;
 
-
+    /**
+     * Constructeur initialisant le tableau de bord avec le contrôleur.
+     *
+     * @param controller Le contrôleur de la pharmacie.
+     */
     public Dashboard(PharmacyController controller) {
         this.controller = controller;
         setTitle("Pharmacie Sparadrap - Dashboard");
@@ -36,6 +43,11 @@ public class Dashboard extends JFrame {
         // Layout principal avec barre latérale et contenu central
         setLayout(new BorderLayout());
 
+        /**
+         * Crée et retourne la barre de navigation.
+         *
+         * @return Le JPanel de la barre de navigation.
+         */
         // Barre de navigation (navbar)
         JPanel navbar = new JPanel();
         navbar.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -47,12 +59,23 @@ public class Dashboard extends JFrame {
         navbar.add(title);
         add(navbar, BorderLayout.NORTH);
 
+        /**
+         * Crée et retourne la barre latérale.
+         *
+         * @return Le JPanel de la barre latérale.
+         */
         // Sidebar avec boutons
         JPanel sidebar = new JPanel();
         sidebar.setLayout(new GridLayout(6, 1));
         sidebar.setBackground(new Color(242, 242, 242));
         sidebar.setPreferredSize(new Dimension(200, 600));
 
+        /**
+         * Crée un bouton pour la barre latérale.
+         *
+         * @param text Le texte du bouton.
+         * @return Le JButton configuré.
+         */
         // Boutons de la sidebar
         JButton btnPurchase = new JButton("Effectuer un achat");
         btnPurchase.setBackground(new Color(32, 119, 18));
@@ -347,6 +370,9 @@ public class Dashboard extends JFrame {
         panel.repaint();
     }
 
+    /**
+     * Ouvre la vue d'historique des achats.
+     */
     public void openHistoryPage() {
         contentPanel.removeAll();
 
@@ -449,7 +475,11 @@ public class Dashboard extends JFrame {
                         "Êtes-vous sûr de vouloir supprimer cet achat ?", "Confirmation",
                         JOptionPane.YES_NO_OPTION);
                 if (confirm == JOptionPane.YES_OPTION) {
-                    controller.removePurchase(selectedPurchase);
+                    try {
+                        controller.removePurchase(selectedPurchase);
+                    } catch (SystemeException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     purchaseListModel.removeElement(selectedPurchase);
                     detailsArea.setText("");
                     JOptionPane.showMessageDialog(null,
@@ -485,7 +515,9 @@ public class Dashboard extends JFrame {
         JOptionPane.showMessageDialog(null, "Fonctionnalité de modification à implémenter.");
     }
 
-
+    /**
+     * Ouvre la page des clients.
+     */
     public void openClientPage() {
         contentPanel.removeAll();
 
@@ -593,7 +625,11 @@ public class Dashboard extends JFrame {
                         "Êtes-vous sûr de vouloir supprimer ce client ?",
                         "Confirmation", JOptionPane.YES_NO_OPTION);
                 if (confirm == JOptionPane.YES_OPTION) {
-                    controller.removeClient(selectedClient);  // Méthode pour supprimer le client depuis le contrôleur
+                    try {
+                        controller.removeClient(selectedClient);  // Méthode pour supprimer le client depuis le contrôleur
+                    } catch (SaisieException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     clientListModel.removeElement(selectedClient);
                     detailsArea.setText("");
                     JOptionPane.showMessageDialog(null, "Client supprimé avec succès.");
@@ -710,7 +746,9 @@ public class Dashboard extends JFrame {
         }
     }
 
-
+    /**
+     * Ouvre la page des médecins.
+     */
     public void openDoctorPage() {
         contentPanel.removeAll();
 
