@@ -25,13 +25,10 @@ public class PharmacyController {
 
     // Gestion des achats
     public void addPurchase(Purchase purchase) throws SystemeException {
-        if (purchase.getMedicines() == null || purchase.getMedicines().isEmpty()) {
-            throw new SystemeException("Aucun médicament n'a été sélectionné pour cet achat !");
+        if (purchase == null) {
+            throw new SystemeException("Purchase cannot be null.");
         }
-        if (purchase.getTotalPrice() <= 0) {
-            throw new SystemeException("Le prix total de l'achat ne peut pas être nul ou négatif !");
-        }
-        pharmacy.addPurchase(purchase);  // Enregistrer l'achat dans la pharmacie
+        pharmacy.addPurchase(purchase);
     }
 
     /**

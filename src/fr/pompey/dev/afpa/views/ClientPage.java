@@ -85,7 +85,11 @@ public class ClientPage extends JFrame {
 
         // Action pour modifier un client
         btnModifier.addActionListener(e -> {
-            modifyClient();
+            try {
+                modifyClient();
+            } catch (SaisieException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         // Action pour supprimer un client
@@ -228,7 +232,7 @@ public class ClientPage extends JFrame {
         }
     }
 
-    private void modifyClient() {
+    private void modifyClient() throws SaisieException {
         Client selectedClient = (Client) comboClient.getSelectedItem();
         if (selectedClient != null) {
             JTextField firstNameField = new JTextField(selectedClient.getFirstName());

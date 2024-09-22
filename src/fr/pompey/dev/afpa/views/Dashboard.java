@@ -3,6 +3,7 @@ package fr.pompey.dev.afpa.views;
 import fr.pompey.dev.afpa.controllers.PharmacyController;
 import fr.pompey.dev.afpa.exceptions.SaisieException;
 import fr.pompey.dev.afpa.exceptions.SystemeException;
+import fr.pompey.dev.afpa.utilities.DialogUtils;
 import fr.pompey.dev.afpa.models.*;
 import fr.pompey.dev.afpa.models.Doctor;
 
@@ -261,56 +262,36 @@ public class Dashboard extends JFrame {
         purchasePanel.add(validateButton, gbc);
 
         validateButton.addActionListener(e -> {
-            // Logique pour la validation
             String selectedType = (String) typeAchatCombo.getSelectedItem();
             if (selectedType.equals("Achat direct")) {
-                // Achat direct
-
-                Client client = null;
-
-                Medicine selectedMedicineTemp = (Medicine) medicineCombo.getSelectedItem();
-                Medicine selectedMedicine = selectedMedicineTemp.clone();
-                int quantity = Integer.parseInt(quantityField.getText());
-                totalPrice = Double.parseDouble(totalValueLabel.getText().replace(" €", ""));
-                LocalDate date = LocalDate.now();
-                Purchase purchase = new Purchase(selectedMedicines);
+                // Handle Achat direct
                 try {
-                    controller.addPurchase(purchase);
+                    controller.addPurchase(new Purchase(selectedMedicines));
+                    totalPrice = 0;
+                    selectedMedicines.clear();
+                    addedMedicinesArea.setText("");  // Clear the added medicines area
+                    totalValueLabel.setText("0.00 €");  // Reset total price
+                    quantityField.setText("");  // Clear the quantity field
+                    JOptionPane.showMessageDialog(null, "Achat validé avec succès !");
                 } catch (SystemeException ex) {
                     throw new RuntimeException(ex);
                 }
-                totalPrice = 0;
-                selectedMedicines.clear();
-                JOptionPane.showMessageDialog(null, "Achat validé avec succès !");
             } else if (selectedType.equals("Achat avec ordonnance")) {
-                // Achat avec ordonnance
-                Client client = (Client) clientCombo.getSelectedItem();
-                Doctor doctor = (Doctor) doctorCombo.getSelectedItem();
-
-
-                Medicine selectedMedicine = (Medicine) medicineCombo.getSelectedItem();
-                int quantity = Integer.parseInt(quantityField.getText());
-                totalPrice = Double.parseDouble(totalValueLabel.getText().replace(" €", ""));
-                LocalDate date = LocalDate.now();
-                Ordonnance ordonnance;
-                if (doctor instanceof Specialist) {
-                    ordonnance = new Ordonnance(LocalDate.now(), client.getDoctor(), client,
-                            selectedMedicines, (Specialist) doctor);
-                }else{
-                    ordonnance = new Ordonnance(LocalDate.now(), doctor, client, selectedMedicines,
-                            doctor instanceof Specialist ? (Specialist) doctor : null);
-                }
-                Purchase purchase = new Purchase(ordonnance);
-
+                // Handle Achat avec ordonnance
                 try {
+                    Client client = (Client) clientCombo.getSelectedItem();
+                    Doctor doctor = (Doctor) doctorCombo.getSelectedItem();
+                    Purchase purchase = new Purchase(new Ordonnance(LocalDate.now(), doctor, client, selectedMedicines, null));
                     controller.addPurchase(purchase);
+                    totalPrice = 0;
+                    selectedMedicines.clear();
+                    addedMedicinesArea.setText("");
+                    totalValueLabel.setText("0.00 €");
+                    quantityField.setText("");
+                    JOptionPane.showMessageDialog(null, "Achat validé avec succès !");
                 } catch (SystemeException ex) {
                     throw new RuntimeException(ex);
                 }
-                System.out.println(purchase.getOrdonnance().getDoctor());
-                System.out.println(purchase.getOrdonnance().getSpecialist());
-//                totalPrice = 0;
-                JOptionPane.showMessageDialog(null, "Achat validé avec succès !");
             }
         });
 
@@ -382,19 +363,24 @@ public class Dashboard extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Label pour l'historique des achats
+        // Label for Purchase History
         JLabel historyLabel = new JLabel("Historique des achats");
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         historyPage.add(historyLabel, gbc);
 
-        // Liste pour afficher les achats
+        // List to display purchases
         DefaultListModel<Purchase> purchaseListModel = new DefaultListModel<>();
         List<Purchase> purchases = controller.getPurchases();
-        for (Purchase purchase : purchases) {
-            purchaseListModel.addElement(purchase);
+        if (purchases != null && !purchases.isEmpty()) {
+            for (Purchase purchase : purchases) {
+                purchaseListModel.addElement(purchase);  // Add each purchase to the list model
+            }
+        } else {
+            System.out.println("No purchases found.");
         }
+
         JList<Purchase> purchaseList = new JList<>(purchaseListModel);
         purchaseList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane scrollPane = new JScrollPane(purchaseList);
@@ -404,7 +390,7 @@ public class Dashboard extends JFrame {
         gbc.fill = GridBagConstraints.BOTH;
         historyPage.add(scrollPane, gbc);
 
-        // Zone de texte pour afficher les détails de l'achat sélectionné
+        // TextArea to display details of selected purchase
         JTextArea detailsArea = new JTextArea(10, 30);
         detailsArea.setEditable(false);
         JScrollPane detailsScrollPane = new JScrollPane(detailsArea);
@@ -413,37 +399,15 @@ public class Dashboard extends JFrame {
         gbc.gridwidth = 2;
         historyPage.add(detailsScrollPane, gbc);
 
-        // Écouteur pour afficher les détails lorsque l'achat est sélectionné
+        // List selection listener to display purchase details
         purchaseList.addListSelectionListener(e -> {
             Purchase selectedPurchase = purchaseList.getSelectedValue();
             if (selectedPurchase != null) {
-                StringBuilder detailsText = new StringBuilder();
-                Client client = selectedPurchase.getOrdonnance() != null ? selectedPurchase
-                        .getOrdonnance().getClient() : null;
-                Doctor doctor = selectedPurchase.getOrdonnance() != null ? selectedPurchase
-                        .getOrdonnance().getDoctor() : null;
-
-                String medicamentsStr = "";
-                for (Medicine medicine : selectedPurchase.getMedicines()) {
-                    medicamentsStr += medicine.getName() + " - Quantité: " + medicine.getQuantity() + ", ";
-                }
-
-                String doctorName = (doctor != null) ? "\nDocteur : " + doctor.getLastName() + " "
-                        + doctor.getFirstName() : "";
-                String clientName = (client != null) ? client.getFirstName() + " "
-                        + client.getLastName() : "Client inconnu";
-
-                detailsText.append("Client : ").append(clientName)
-                        .append(doctorName)
-                        .append("\nMédicaments : ").append(medicamentsStr)
-                        .append("\nTotal : ").append(selectedPurchase.getTotalPrice()).append(" €")
-                        .append("\nDate : ").append(selectedPurchase.getDate()).append("\n\n");
-
-                detailsArea.setText(detailsText.toString());
+                detailsArea.setText(selectedPurchase.toString());  // Display selected purchase details
             }
         });
 
-        // Bouton Modifier
+        // Modify Button
         JButton editButton = new JButton("Modifier");
         gbc.gridx = 0;
         gbc.gridy = 3;
@@ -453,15 +417,14 @@ public class Dashboard extends JFrame {
         editButton.addActionListener(e -> {
             Purchase selectedPurchase = purchaseList.getSelectedValue();
             if (selectedPurchase != null) {
-                // Logique pour modifier l'achat
-                modifyPurchase(selectedPurchase);
+                modifyPurchase(selectedPurchase);  // Logic to modify purchase
             } else {
                 JOptionPane.showMessageDialog(null,
                         "Veuillez sélectionner un achat à modifier.");
             }
         });
 
-        // Bouton Supprimer
+        // Delete Button
         JButton deleteButton = new JButton("Supprimer");
         gbc.gridx = 1;
         gbc.gridy = 3;
@@ -470,7 +433,6 @@ public class Dashboard extends JFrame {
         deleteButton.addActionListener(e -> {
             Purchase selectedPurchase = purchaseList.getSelectedValue();
             if (selectedPurchase != null) {
-                // Logique pour supprimer l'achat
                 int confirm = JOptionPane.showConfirmDialog(null,
                         "Êtes-vous sûr de vouloir supprimer cet achat ?", "Confirmation",
                         JOptionPane.YES_NO_OPTION);
@@ -491,7 +453,7 @@ public class Dashboard extends JFrame {
             }
         });
 
-        // Bouton Retour
+        // Back Button
         JButton backButton = new JButton("Retour");
         gbc.gridx = 0;
         gbc.gridy = 4;
