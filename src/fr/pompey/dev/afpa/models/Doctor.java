@@ -1,5 +1,7 @@
 package fr.pompey.dev.afpa.models;
 
+import fr.pompey.dev.afpa.exceptions.SaisieException;
+
 import java.time.LocalDate;
 
 /**
@@ -9,8 +11,11 @@ public class Doctor extends Person {
     private String registrationNumber;
 
     public Doctor(String firstName, String lastName, String address, String city, String postalCode,
-                  String phone, String email, String socialSecurityNumber, LocalDate birthDate, String registrationNumber) {
+                  String phone, String email, String socialSecurityNumber, LocalDate birthDate, String registrationNumber) throws SaisieException {
         super(firstName, lastName, address, city, postalCode, phone, email, socialSecurityNumber, LocalDate.now());
+        if (registrationNumber == null || registrationNumber.isEmpty()) {
+            throw new SaisieException("Le numéro d'inscription du médecin ne peut pas être vide !");
+        }
         this.registrationNumber = registrationNumber;
     }
 
@@ -27,5 +32,10 @@ public class Doctor extends Person {
     @Override
     public String toString() {
         return lastName + ' ' + firstName;
+    }
+
+    @Override
+    public void addDoctor(Doctor doctor1) {
+
     }
 }

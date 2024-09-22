@@ -1,9 +1,7 @@
 package fr.pompey.dev.afpa.views;
 
 import fr.pompey.dev.afpa.controllers.PharmacyController;
-import fr.pompey.dev.afpa.models.Doctor;
-import fr.pompey.dev.afpa.models.Medicine;
-import fr.pompey.dev.afpa.models.Purchase;
+import fr.pompey.dev.afpa.models.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,23 +38,28 @@ public class HistoryPage extends JFrame {
                 for (Purchase purchase : purchases) {
 
                     String medicamentsStr = "";
-
                     for (Medicine medicine : purchase.getMedicines()) {
-                        medicamentsStr += medicine.getName() + " - Quantité: " + medicine.getQuantity() +", ";
+                        medicamentsStr += medicine.getName() + " - Quantité: " + medicine.getQuantity() + ", ";
                     }
 
+                    if (purchase.getOrdonnance() != null) {
+                        Client client = purchase.getOrdonnance().getClient();
+                        Doctor doctor = purchase.getOrdonnance().getDoctor();
 
-                    if(purchase.getOrdonnance()!= null){
-                        historyText.append("Client : ").append(purchase.getOrdonnance().getClient().getFirstName())
-                                .append(" ").append(purchase.getOrdonnance().getClient().getLastName())
+                        String doctorInfo = doctor instanceof Specialist
+                                ? "Spécialité : " + ((Specialist) doctor).getSpecialty()
+                                : "Médecin généraliste";
+
+                        historyText.append("Client : ").append(client.getFirstName())
+                                .append(" ").append(client.getLastName())
                                 .append("\nMédicament : ").append(medicamentsStr)
                                 .append("\nDate : ").append(purchase.getDate())
+                                .append("\nMédecin : ").append(doctor.getFirstName())
+                                .append(" ").append(doctor.getLastName())
+                                .append("\n").append(doctorInfo)  // Ajout de l'info Médecin généraliste ou Spécialiste
                                 .append("\nPrix : ").append(purchase.getTotalPrice())
                                 .append(" €\n--------------------\n");
-                    } else{
-
                     }
-
                 }
                 historyArea.setText(historyText.toString());
             }

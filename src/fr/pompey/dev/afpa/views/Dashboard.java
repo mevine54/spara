@@ -1,6 +1,8 @@
 package fr.pompey.dev.afpa.views;
 
 import fr.pompey.dev.afpa.controllers.PharmacyController;
+import fr.pompey.dev.afpa.exceptions.SaisieException;
+import fr.pompey.dev.afpa.exceptions.SystemeException;
 import fr.pompey.dev.afpa.models.*;
 import fr.pompey.dev.afpa.models.Doctor;
 
@@ -249,7 +251,11 @@ public class Dashboard extends JFrame {
                 totalPrice = Double.parseDouble(totalValueLabel.getText().replace(" €", ""));
                 LocalDate date = LocalDate.now();
                 Purchase purchase = new Purchase(selectedMedicines);
-                controller.addPurchase(purchase);
+                try {
+                    controller.addPurchase(purchase);
+                } catch (SystemeException ex) {
+                    throw new RuntimeException(ex);
+                }
                 totalPrice = 0;
                 selectedMedicines.clear();
                 JOptionPane.showMessageDialog(null, "Achat validé avec succès !");
@@ -273,7 +279,11 @@ public class Dashboard extends JFrame {
                 }
                 Purchase purchase = new Purchase(ordonnance);
 
-                controller.addPurchase(purchase);
+                try {
+                    controller.addPurchase(purchase);
+                } catch (SystemeException ex) {
+                    throw new RuntimeException(ex);
+                }
                 System.out.println(purchase.getOrdonnance().getDoctor());
                 System.out.println(purchase.getOrdonnance().getSpecialist());
 //                totalPrice = 0;
@@ -541,7 +551,11 @@ public class Dashboard extends JFrame {
         DateTimeFormatter formatter = null;
         addButton.addActionListener(e -> {
             // Logique pour créer un nouveau client
-            createOrModifyClient(null, clientListModel, formatter);
+            try {
+                createOrModifyClient(null, clientListModel, formatter);
+            } catch (SaisieException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         // Bouton Modifier
@@ -554,7 +568,11 @@ public class Dashboard extends JFrame {
             Client selectedClient = clientList.getSelectedValue();
             if (selectedClient != null) {
                 // Logique pour modifier le client
-                createOrModifyClient(selectedClient, clientListModel, formatter);
+                try {
+                    createOrModifyClient(selectedClient, clientListModel, formatter);
+                } catch (SaisieException ex) {
+                    throw new RuntimeException(ex);
+                }
             } else {
                 JOptionPane.showMessageDialog(null,
                         "Veuillez sélectionner un client à modifier.");
@@ -605,7 +623,7 @@ public class Dashboard extends JFrame {
     }
 
     // Méthode pour créer ou modifier un client
-    private void createOrModifyClient(Client client, DefaultListModel<Client> clientListModel, DateTimeFormatter formatter) {
+    private void createOrModifyClient(Client client, DefaultListModel<Client> clientListModel, DateTimeFormatter formatter) throws SaisieException {
         JTextField lastNameField = new JTextField(20);
         JTextField firstNameField = new JTextField(20);
         JTextField addressField = new JTextField(20);

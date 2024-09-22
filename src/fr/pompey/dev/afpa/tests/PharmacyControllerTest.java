@@ -1,6 +1,7 @@
 package fr.pompey.dev.afpa.tests;
 
 import fr.pompey.dev.afpa.controllers.PharmacyController;
+import fr.pompey.dev.afpa.exceptions.SaisieException;
 import fr.pompey.dev.afpa.models.Client;
 import fr.pompey.dev.afpa.models.Medicine;
 import fr.pompey.dev.afpa.models.Pharmacy;
@@ -25,7 +26,7 @@ class PharmacyControllerTest {
     }
 
     @Test
-    void testAddClient() {
+    void testAddClient() throws SaisieException {
         Client client = new Client("Jean", "Dupont", "Rue de la paix", "Paris", "75001",
                 "0102030405", "jean.dupont@gmail.com", "1234567890123", LocalDate.now(), null, null);
         controller.addClient(client);
@@ -34,7 +35,7 @@ class PharmacyControllerTest {
     }
 
     @Test
-    void testAddMedicine() {
+    void testAddMedicine() throws SaisieException {
         Medicine medicine = new Medicine("Doliprane", MedicineCategory.ANALGESIC, 2.5, LocalDate.now(), 100);
         controller.addMedicine(medicine);
 

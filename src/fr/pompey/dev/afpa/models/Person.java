@@ -102,6 +102,8 @@ public abstract class Person {
         this.birthDate = birthDate;
     }
 
+    public abstract void addDoctor(Doctor doctor1);
+
     @Override
     public String toString() {
         return "Person{" +
@@ -116,4 +118,5 @@ public abstract class Person {
                 ", birthDate=" + birthDate +
                 '}';
     }
+
 }

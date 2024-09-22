@@ -2,11 +2,8 @@ package fr.pompey.dev.afpa.exceptions;
 
 public class SystemeException extends Exception {
 
-    public SystemeException() {
+    public SystemeException(String message) {
         super();
     }
 
-    public SystemeException(String message) {
-        super(message);
-    }
 }

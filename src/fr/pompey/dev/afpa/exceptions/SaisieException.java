@@ -6,7 +6,4 @@ public class SaisieException extends Exception{
         super(message);
     }
 
-    public SaisieException( ) {
-        super();
-    }
 }

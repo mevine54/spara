@@ -1,5 +1,7 @@
 package fr.pompey.dev.afpa.models;
 
+import fr.pompey.dev.afpa.exceptions.SaisieException;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,8 +12,6 @@ import java.util.List;
  */
 public class Purchase {
     private Client client;
-//    private Medicine medicine;
-//    private int quantity;
     private double totalPrice;
     private LocalDate date;
 
@@ -33,7 +33,13 @@ public class Purchase {
         setTotalPrice();
     }
 
-    public Purchase(List<Medicine> medicines, LocalDate date) {
+    public Purchase(List<Medicine> medicines, LocalDate date) throws SaisieException {
+        if (medicines == null || medicines.isEmpty()) {
+            throw new SaisieException("La liste de médicaments ne peut pas être vide !");
+        }
+        if (date == null) {
+            throw new SaisieException("La date de l'achat ne peut pas être nulle !");
+        }
         this.medicines = medicines;
         this.date = date;
         setTotalPrice();
@@ -53,40 +59,51 @@ public class Purchase {
     }
 
     public List<Medicine> getMedicines() {
-        return medicines;
+        return new ArrayList<>(medicines); // Retourne une copie défensive
     }
 
-
-    public double getTotalPrice() {
-        return this.totalPrice;
+    // Setter pour les médicaments avec vérification
+    public void setMedicines(List<Medicine> medicines) throws SaisieException {
+        if (medicines == null || medicines.isEmpty()) {
+            throw new SaisieException("La liste de médicaments ne peut pas être vide.");
+        }
+        this.medicines = medicines;
+        setTotalPrice(); // Recalculer le total quand les médicaments sont modifiés
     }
 
     private void setTotalPrice() {
-        double totalPrice = 0;
-        for (Medicine medicine : medicines) {
-            totalPrice += medicine.calculateTotalPrice();
-        }
-        this.totalPrice = totalPrice;
+        this.totalPrice = medicines.stream().mapToDouble(Medicine::calculateTotalPrice).sum();
     }
 
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
+    public double getTotalPrice() {
+        return this.totalPrice;
     }
 
     public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    // Setter pour la date avec vérification
+    public void setDate(LocalDate date) throws SaisieException {
+        if (date == null) {
+            throw new SaisieException("La date de l'achat ne peut pas être nulle !");
+        }
         this.date = date;
     }
 
+
+
     @Override
     public String toString() {
-        return "Purchase{" +
-                "client=" + client +
-                ", date=" + date +
-                '}';
+        StringBuilder details = new StringBuilder("Achat du : " + date.toString() + "\n");
+        for (Medicine medicine : medicines) {
+            details.append("Médicament : ").append(medicine.getName())
+                    .append(", Quantité : ").append(medicine.getQuantity())
+                    .append(", Prix : ").append(medicine.calculateTotalPrice())
+                    .append(" €\n");
+        }
+        details.append("Prix total : ").append(totalPrice).append(" €");
+        return details.toString();
     }
 }
 

@@ -2,6 +2,7 @@ package fr.pompey.dev.afpa.models;
 
 import java.time.LocalDate;
 import fr.pompey.dev.afpa.enums.MedicineCategory;
+import fr.pompey.dev.afpa.exceptions.SaisieException;
 
 /**
  * Classe représentant un médicament.
@@ -13,12 +14,32 @@ public class Medicine {
     private LocalDate releaseDate;
     private int quantity;
 
-    public Medicine(String name, MedicineCategory category, double price, LocalDate releaseDate, int quantity) {
+    public Medicine(String name, MedicineCategory category, double price, LocalDate releaseDate, int quantity) throws SaisieException {
+        if (name == null || name.trim().isEmpty()) {
+            throw new SaisieException("Le nom du médicament ne peut pas être vide !");
+        }
+        if (category == null) {
+            throw new SaisieException("La catégorie du médicament ne peut pas être nulle !");
+        }
+        if (price < 0) {
+            throw new SaisieException("Le prix ne peut pas être négatif !");
+        }
+        if (releaseDate == null || releaseDate.isAfter(LocalDate.now())) {
+            throw new SaisieException("La date de sortie ne peut pas être dans le futur !");
+        }
+        if (quantity < 0) {
+            throw new SaisieException("La quantité ne peut pas être négative !");
+        }
         this.name = name;
         this.category = category;
         this.price = price;
         this.releaseDate = releaseDate;
         this.quantity = quantity;
+    }
+
+    // Calculer le prix total pour une quantité donnée
+    public double calculateTotalPrice() {
+        return price * quantity;
     }
 
     // Getters et Setters
@@ -66,13 +87,15 @@ public class Medicine {
 
     @Override
     public Medicine clone() {
-        return new Medicine(this.name, this.category, this.price, this.releaseDate, this.quantity);
+        try {
+            return new Medicine(this.name, this.category, this.price, this.releaseDate, this.quantity);
+        } catch (SaisieException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // Calculer le prix total pour une quantité donnée
-    public double calculateTotalPrice() {
-        return this.price * quantity;
-    }
+
 
     @Override
     public String toString() {

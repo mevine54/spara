@@ -1,5 +1,7 @@
 package fr.pompey.dev.afpa.controllers;
 
+import fr.pompey.dev.afpa.exceptions.SaisieException;
+import fr.pompey.dev.afpa.exceptions.SystemeException;
 import fr.pompey.dev.afpa.models.*;
 
 import java.time.LocalDate;
@@ -13,7 +15,13 @@ public class PharmacyController {
     }
 
     // Gestion des achats
-    public void addPurchase(Purchase purchase) {
+    public void addPurchase(Purchase purchase) throws SystemeException {
+        if (purchase.getMedicines() == null || purchase.getMedicines().isEmpty()) {
+            throw new SystemeException("Aucun médicament n'a été sélectionné pour cet achat !");
+        }
+        if (purchase.getTotalPrice() <= 0) {
+            throw new SystemeException("Le prix total de l'achat ne peut pas être nul ou négatif !");
+        }
         pharmacy.addPurchase(purchase);  // Enregistrer l'achat dans la pharmacie
     }
 
@@ -22,7 +30,13 @@ public class PharmacyController {
     }
 
     // Gestion des clients
-    public void addClient(Client client) {
+    public void addClient(Client client) throws SaisieException {
+        if (client == null || client.getFirstName().isEmpty() || client.getLastName().isEmpty()) {
+            throw new SaisieException("Le nom ou le prénom est invalide !");
+        }
+        if (!client.getEmail().contains("@")) {
+            throw new SaisieException("L' email du client est invalide !");
+        }
         pharmacy.addClient(client);
     }
 
@@ -35,7 +49,10 @@ public class PharmacyController {
     }
 
     // Gestion des médecins
-    public void addDoctor(Doctor doctor) {
+    public void addDoctor(Doctor doctor) throws SaisieException {
+        if (doctor == null) {
+            throw new SaisieException("Le médecin ne peut pas être nul.");
+        }
         pharmacy.addDoctor(doctor);
     }
 
@@ -48,7 +65,10 @@ public class PharmacyController {
     }
 
     // Gestion des médicaments
-    public void addMedicine(Medicine medicine) {
+    public void addMedicine(Medicine medicine) throws SaisieException {
+        if (medicine == null) {
+            throw new SaisieException("Le médicament ne peut pas être nul.");
+        }
         pharmacy.addMedicine(medicine);
     }
 
@@ -86,6 +106,14 @@ public class PharmacyController {
 
     public void updateClient(Client client) {
         pharmacy.updateClient(client);
+    }
+
+    public void updatePurchase(Purchase purchase, List<Medicine> newMedicines, LocalDate newDate) throws SaisieException {
+        if (purchase == null) {
+            throw new SaisieException("L'achat à modifier est introuvable !");
+        }
+        purchase.setMedicines(newMedicines); // Vérification des nouveaux médicaments
+        purchase.setDate(newDate); // Vérification de la nouvelle date
     }
 
     public  void deleteClient(Client client) {

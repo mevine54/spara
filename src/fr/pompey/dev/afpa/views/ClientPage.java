@@ -2,6 +2,7 @@ package fr.pompey.dev.afpa.views;
 
 
 import fr.pompey.dev.afpa.controllers.PharmacyController;
+import fr.pompey.dev.afpa.exceptions.SaisieException;
 import fr.pompey.dev.afpa.models.Client;
 import fr.pompey.dev.afpa.models.Doctor;
 import fr.pompey.dev.afpa.models.Mutuelle;
@@ -70,7 +71,11 @@ public class ClientPage extends JFrame {
 
         // Action pour créer un client
         btnCreate.addActionListener(e -> {
-            createClient();
+            try {
+                createClient();
+            } catch (SaisieException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         // Action pour afficher les détails du client sélectionné
@@ -106,7 +111,7 @@ public class ClientPage extends JFrame {
         }
     }
 
-    private void createClient() {
+    private void createClient() throws SaisieException {
         // Ouvrir une boîte de dialogue pour entrer les informations du client
         JTextField firstNameField = new JTextField();
         JTextField lastNameField = new JTextField();
@@ -140,54 +145,75 @@ public class ClientPage extends JFrame {
                 JOptionPane.OK_CANCEL_OPTION);
 
         if (option == JOptionPane.OK_OPTION) {
-            // Récupération des textes des champs
-            String firstName = firstNameField.getText();
-            String lastName = lastNameField.getText();
-            String address = addressField.getText();
-            String city = cityField.getText();
-            String postalCode = postalCodeField.getText();
-            String phone = phoneField.getText();
-            String email = emailField.getText();
-            String ssn = ssnField.getText();
-            String birthDate = birthDateField.getText();
+            try {
+                // Récupération des textes des champs
+                String firstName = firstNameField.getText();
+                String lastName = lastNameField.getText();
+                String address = addressField.getText();
+                String city = cityField.getText();
+                String postalCode = postalCodeField.getText();
+                String phone = phoneField.getText();
+                String email = emailField.getText();
+                String ssn = ssnField.getText();
+                String birthDate = birthDateField.getText();
 
-            // Validation des champs
-            if (!ValidationUtils.isValidName(firstNameField.getText())) {
-                System.out.println("Erreur: Prénom non valide");
-                return;
+                if (firstName == null || firstName.trim().isEmpty()) {
+                    throw new SaisieException("Le prénom ne peut pas être vide !");
+                }
+                if (!phone.matches("\\d{10}")) {
+                    throw new SaisieException("Le numéro de téléphone doit comporter 10 chiffres !");
+                }
+
+                // Validation des champs
+                if (!ValidationUtils.isValidName(firstNameField.getText())) {
+                    System.out.println("Erreur: Prénom non valide !");
+                    return;
+                }
+                if (!ValidationUtils.isValidName(lastNameField.getText())) {
+                    System.out.println("Erreur: Nom non valide !");
+                    return;
+                }
+                if (!ValidationUtils.isValidAddress(addressField.getText())) {
+                    System.out.println("Erreur: Adresse non valide !");
+                    return;
+                }
+                if (!ValidationUtils.isValidCity(cityField.getText())) {
+                    System.out.println("Erreur: Ville non valide !");
+                    return;
+                }
+                if (!ValidationUtils.isValidPostalCode(postalCodeField.getText())) {
+                    System.out.println("Erreur: Code postal non valide !");
+                    return;
+                }
+                if (!ValidationUtils.isValidPhone(phoneField.getText())) {
+                    System.out.println("Erreur: Téléphone non valide !");
+                }
+                if (!ValidationUtils.isValidEmail(emailField.getText())) {
+                    System.out.println("Erreur: Email non valide !");
+                }
+                if (!ValidationUtils.isValidSsn(ssnField.getText())) {
+                    System.out.println("Erreur: Numéro de sécutité social non valide !");
+                }
+                if (!ValidationUtils.isValidBirthDate(birthDateField.getText())) {
+                    System.out.println("Erreur: Date de naissance non valide !");
+                }
+
+                Mutuelle selectedMutuelle = (Mutuelle) mutuelleCombo.getSelectedItem();
+                Doctor selectedDoctor = (Doctor) doctorCombo.getSelectedItem();
+
+                Client newClient = new Client(firstNameField.getText(), lastNameField.getText(), addressField.getText(),
+                        cityField.getText(), postalCodeField.getText(),
+                        phoneField.getText(), emailField.getText(), ssnField.getText(),
+                        LocalDate.parse(birthDateField.getText()), selectedMutuelle, selectedDoctor);
+                controller.addClient(newClient);
+
+            } catch (SaisieException e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erreur inattendue : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                updateClientList();
+                JOptionPane.showMessageDialog(this, "Client créé avec succès !");
             }
-
-            if (!ValidationUtils.isValidName(lastNameField.getText())) {
-                System.out.println("Erreur: Nom non valide");
-                return;
-            }
-
-            if (!ValidationUtils.isValidAddress(address)) {
-                System.out.println("Erreur: Adresse non valide");
-                return;
-            }
-
-            if (!ValidationUtils.isValidCity(cityField.getText())) {
-                System.out.println("Erreur: Ville non valide");
-                return;
-            }
-
-            if (!ValidationUtils.isValidName(postalCodeField.getText())) {
-                System.out.println("Erreur: Code postal non valide");
-                return;
-            }
-
-            if (!ValidationUtils.is)
-            Mutuelle selectedMutuelle = (Mutuelle) mutuelleCombo.getSelectedItem();
-            Doctor selectedDoctor = (Doctor) doctorCombo.getSelectedItem();
-
-            Client newClient = new Client(firstNameField.getText(), lastNameField.getText(), addressField.getText(),
-                    cityField.getText(), postalCodeField.getText(),
-                    phoneField.getText(), emailField.getText(), ssnField.getText(),
-                    LocalDate.parse(birthDateField.getText()), selectedMutuelle, selectedDoctor );
-            controller.addClient(newClient);
-            updateClientList();
-            JOptionPane.showMessageDialog(this, "Client créé avec succès !");
         }
     }
 
