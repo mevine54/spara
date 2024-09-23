@@ -36,8 +36,7 @@ class PurchaseTest {
 
     @Test
     void getOrdonnance() {
-        // Vous n'avez pas encore implémenté de méthode pour gérer l'ordonnance dans Purchase.
-        // Il faudra soit retirer ce test, soit l'ajouter à la classe Purchase si nécessaire.
+
     }
 
     @Test

@@ -20,7 +20,7 @@ public class Main {
 
         // Création de quelques médecins, clients, médicaments et mutuelles pour tester
         Doctor doctor1 = new Doctor("Jean", "Martin", "12 rue de la santé", "Paris",
-                "75000", "0102030405", "jean.martin@docteur.com", "123451254785426",
+                "75000", "0102030405", "jean.martin@docteur.com", "123451254785146",
                 LocalDate.now(), "012345");
         doctor1.addDoctor(doctor1);
         Specialist specialist1 = new Specialist("Alice", "Dupont", "34 avenue des soins",

@@ -28,7 +28,7 @@ class PharmacyControllerTest {
     @Test
     void testAddClient() throws SaisieException {
         Client client = new Client("Jean", "Dupont", "Rue de la paix", "Paris", "75001",
-                "0102030405", "jean.dupont@gmail.com", "1234567890123", LocalDate.now(), null, null);
+                "0102030405", "jean.dupont@gmail.com", "123456789012123", LocalDate.now(), null, null);
         controller.addClient(client);
 
         assertNotNull(controller.getClientByName("Jean"));
